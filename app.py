@@ -9,6 +9,8 @@ import threading
 
 app = Flask(__name__)
 AUDIO_FOLDER = "audio"
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a59277976e9c00c59914b53f5abef33cfa67669a3661d'
+
 os.makedirs(AUDIO_FOLDER, exist_ok=True)
 
 TEMPO_RETENCAO_SEGUNDOS_TESTE = 60 * 5  # Manter arquivos por 5 minuto para teste
@@ -85,4 +87,4 @@ def audio(filename):
     return send_from_directory(AUDIO_FOLDER, filename)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
