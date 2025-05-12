@@ -44,6 +44,10 @@ def extrair_texto_pdf(caminho_pdf):
         texto += pagina.get_text()
     return texto
 
+# Função para exibir a página sobre o aplicativo
+@app.route("/sobre")
+def sobre():
+    return render_template("sobre.html")
 
 
 @app.route("/", methods=["GET", "POST"])

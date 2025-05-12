@@ -127,3 +127,27 @@ footer {
     box-sizing: border-box; /* Garante que padding não aumente a largura */
     margin-top: 30px; /* Adiciona um espaço acima do rodapé */
 }
+.progress-bar {
+            display: none;
+            margin-top: 1rem;
+            height: 8px;
+            background-color: #ccc;
+        }
+
+        .progress-bar-fill {
+            width: 100%;
+            height: 100%;
+            background-color: #4caf50;
+            animation: load 2s infinite;
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-top: 1rem;
+        }

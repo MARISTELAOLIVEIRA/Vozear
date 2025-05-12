@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Vozear</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+
+    <style>
+        .dark-mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Dark mode (seu código existente)
+        if (localStorage.getItem("dark-mode") === "true") {
+            document.body.classList.add("dark-mode");
+        }
+
+        const darkModeToggle = document.querySelector('.dark-mode-toggle');
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+        }
+
+    });
+</script>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('index') }}'">Voltar</button>
+
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
+    <div style="text-align: justify;">
+    <p>O <span style="color: rgb(29, 79, 29); font-weight: bold;">Vozear</span> é um projeto desenvolvido por &copy; Maristela Oliveira, 🎓 professora de Ciência da Computação, com o objetivo de facilitar o acesso à informação através da conversão de texto em áudio.</p>
+    <p>O projeto foi inspirado na necessidade de tornar o conteúdo digital mais acessível para pessoas com dificuldades de leitura, como dislexia ou baixa visão, além de oferecer uma alternativa para estudantes que preferem ouvir o conteúdo em vez de lê-lo.</p>
+    <p>O Vozear utiliza a tecnologia de síntese de voz da Microsoft, que oferece vozes naturais e de alta qualidade. É uma ferramenta útil para estudantes, profissionais e qualquer pessoa que deseje consumir informações de forma mais acessível. Ele suporta a conversão de textos digitados diretamente na interface ou enviados como arquivos PDF, além de permitir escolher entre diferentes vozes e ajustar a velocidade da leitura.</p>
+    <p>O projeto foi desenvolvido em Python e utiliza o Flask como framework web, garantindo uma interface simples e intuitiva. O deploy foi feito no Azure em uma conta educacional, o que garante um ambiente seguro e confiável para o uso do aplicativo.</p>
+    <p>O projeto é open-source e está disponível no GitHub. Você pode contribuir com melhorias, reportar bugs ou sugerir novas funcionalidades. <a href="https://github.com/MARISTELAOLIVEIRA/Vozear.git"> Repositório</a></p></p>
+    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato <a href="https://github.com/MARISTELAOLIVEIRA"> Maristela</a></p></div>
+    <p>Gostou do projeto? Quer contribuir para que permaneça no ar? Clique ⬇️ e me paga um cafezinho 😉.</p>
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="maristela" data-color="#FFDD00" data-emoji="☕"  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>  
+</body>
+</html>
