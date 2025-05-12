@@ -40,44 +40,55 @@
     });
 </script>
 <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
-    <h1>VOZEAR</h1>
-    <h1>Conversor de 📄 Texto para Áudio 🔊</h1>
-    <p style="font-size: 12px;">Este conversor foi idealizado para auxiliar pessoas com deficiência visual.</p>
+<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('sobre') }}'">Sobre</button>
 
-    <form method="post" enctype="multipart/form-data">
-        <textarea name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50"></textarea><br><br>
+<img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
+<h1>Conversor de 📄 Texto para Áudio 🔊</h1>
+<p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
 
-        <label>Ou envie um PDF:</label>
-        <input type="file" name="arquivo" accept=".pdf"><br><br>
+<form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
+    <textarea name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50"></textarea><br><br>
 
-        <label>Escolha a voz:</label>
-        <select name="voz">
-            <option value="pt-BR-FranciscaNeural">Francisca (feminina)</option>
-            <option value="pt-BR-AntonioNeural">Antônio (masculina)</option>
-        </select><br><br>
+    <label>Ou envie um PDF:</label>
+    <input type="file" name="arquivo" accept=".pdf"><br><br>
 
-        <label>Velocidade:</label>
-        <select name="velocidade">
-            <option value="+0%">Normal</option>
-            <option value="-25%">Mais devagar</option>
-            <option value="+25%">Mais rápido</option>
-        </select><br><br>
+    <label>Escolha a voz:</label>
+    <select name="voz">
+        <option value="pt-BR-FranciscaNeural">Francisca (feminina)</option>
+        <option value="pt-BR-AntonioNeural">Antônio (masculina)</option>
+    </select><br><br>
 
-        <button type="submit">Converter</button>
-    </form>
+    <label>Velocidade:</label>
+    <select name="velocidade">
+        <option value="+0%">Normal</option>
+        <option value="-25%">Mais devagar</option>
+        <option value="+25%">Mais rápido</option>
+    </select><br><br>
 
-    {% if audio_file %}
-        <p>RESULTADO:</p>
-        <audio controls>
-            <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
-            Seu navegador não suporta áudio.
-        </audio>
-        <p><a href="{{ url_for('audio', filename=audio_file) }}" download>BAIXAR MP3</a></p>
-    {% endif %}
+    <button type="submit">Converter</button>
 
-    <footer>
-        &copy; Maristela 🐍 🌶️ 2025 
-    </footer>
+    <div class="progress-bar" id="barra">
+        <div class="progress-bar-fill"></div>
+    </div>
 
-</body>
+</form>
+
+{% if audio_file %}
+    <p class="success-message">✅ Áudio gerado com sucesso!</p>
+    <audio controls>
+        <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+    <p><a href="{{ url_for('audio', filename=audio_file) }}" download>⬇️ BAIXAR MP3</a></p>
+{% endif %}
+
+<footer>
+    &copy; Maristela 🐍 🌶️ 2025 v 1.0
+</footer>
+
+<script>
+    function mostrarProgresso() {
+        document.getElementById("barra").style.display = "block";
+    }
+</script>
 </html>
