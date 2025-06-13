@@ -39,10 +39,12 @@
 
     });
 </script>
+<img src="{{ url_for('static', filename='senac.png') }}" alt="Senac" style="position: absolute; top: 50px; left: 10px; width: 200px;">
 <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
-<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('sobre') }}'">Sobre</button>
-<img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="width: 200px; height: auto;">
-<h1>Conversor de 📄 Texto para Áudio 🔊</h1>
+<button style="position: absolute; top: 50px; right: 10px; " onclick="window.location.href='{{ url_for('sobre') }}'">Sobre</button>
+
+<img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
+<h1>Conversor de Texto📄 para Áudio🔊</h1>
 <p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
 
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
@@ -90,4 +92,6 @@
         document.getElementById("barra").style.display = "block";
     }
 </script>
+
+</body>
 </html>

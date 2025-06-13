@@ -39,17 +39,22 @@
 
     });
 </script>
+<img src="{{ url_for('static', filename='senac.png') }}" alt="Senac" style="position: absolute; top: 50px; left: 10px; width: 200px;">
 <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
-<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('index') }}'">Voltar</button>
+<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('index') }}'">Início</button>
 
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
     <div style="text-align: justify;">
-    <p>O <span style="color: rgb(29, 79, 29); font-weight: bold;">Vozear</span> é um projeto desenvolvido por &copy; Maristela Oliveira, 🎓 docente dos cursos de tecnologia da informação no SENAC DF, com o objetivo de facilitar o acesso à informação através da conversão de texto em áudio.</p>
-    <p>O projeto foi inspirado na necessidade de um aluno deficiente visual, eu precisei tornar o conteúdo digital mais acessível para pessoas com dificuldades de leitura, como dislexia ou baixa visão, além de oferecer uma alternativa para estudantes que preferem ouvir o conteúdo em vez de lê-lo.</p>
+    <p>O <span style="color: rgb(29, 79, 29); font-weight: bold;">Vozear</span> é um projeto desenvolvido por mim, Maristela Oliveira, 🎓docente nos cursos de tecnologia da informação no SENAC DF, com o objetivo de facilitar o acesso à informação através da conversão de texto📄 em áudio🔊.</p>
+    <p>O projeto foi inspirado na necessidade de um aluno deficiente visual. Eu precisei tornar o conteúdo digital mais acessível para pessoas com dificuldades de leitura, como dislexia ou baixa visão, além de oferecer uma alternativa para estudantes que preferem ouvir o conteúdo em vez de lê-lo.</p>
     <p>O Vozear utiliza a tecnologia de síntese de voz da Microsoft, que oferece vozes naturais e de alta qualidade. É uma ferramenta útil para estudantes, profissionais e qualquer pessoa que deseje consumir informações de forma mais acessível. Ele suporta a conversão de textos digitados diretamente na interface ou enviados como arquivos PDF, além de permitir escolher entre diferentes vozes e ajustar a velocidade da leitura.</p>
-    <p>O projeto foi desenvolvido em Python e utiliza o Flask como framework web, garantindo uma interface simples e intuitiva. O deploy foi feito no Azure em uma conta educacional, o que garante um ambiente seguro e confiável para o uso do aplicativo.</p>
-    <p>O projeto é open-source e está disponível no GitHub. Você pode contribuir com melhorias, reportar bugs ou sugerir novas funcionalidades. <a href="https://github.com/MARISTELAOLIVEIRA/Vozear.git"> Repositório</a></p></p>
-    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato <a href="https://github.com/MARISTELAOLIVEIRA"> Git Maristela</a></p>
-    <p>maristela.4603@df.senac.df</p></div>
+    <p>O arquivo de áudio gerado ficará disponível para download por 10 minutos após a conversão, depois será deletado automaticamente para não sobrecarregar o servidor.</p>
+    <p>O projeto foi desenvolvido em Python e utiliza o Flask🌶️ como framework web, garantindo uma interface simples e intuitiva. O deploy foi feito no Azure, em uma conta educacional utilizando o recuros de Aplicativo Web, o que garante um ambiente seguro e confiável.</p>
+    <p>O logotipo foi desenvolvido por mim, utilizando o Canva educacional e é uma representação visual do projeto Vozear.</p>
+    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato <a href="https://github.com/MARISTELAOLIVEIRA">GitHub</a>|maristela.4603@df.senac.br</p>
+</div>
+<footer>
+    &copy; Maristela | Senac DF 🐍 🌶️ 2025 v 1.0
+</footer>
 </body>
 </html>
