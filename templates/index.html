@@ -45,6 +45,7 @@
 
 <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
 <h1>Conversor de Texto📄 para Áudio🔊</h1>
+<h2><span style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</span></h2>
 <p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
 
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
@@ -75,12 +76,11 @@
 </form>
 
 {% if audio_file %}
-    <p class="success-message">✅ Áudio gerado com sucesso!</p>
     <audio controls>
         <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
         Seu navegador não suporta áudio.
     </audio>
-    <p><a href="{{ url_for('audio', filename=audio_file) }}" download>⬇️ BAIXAR MP3</a></p>
+    <p><a href="{{ url_for('audio', filename=audio_file) }}" download>✅ Áudio gerado com sucesso! ⬇️ BAIXAR MP3</a></p>
 {% endif %}
 
 <footer>
