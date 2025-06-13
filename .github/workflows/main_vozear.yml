@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - vozear
+name: Build and deploy Python app to Azure Web App - Vozear
 
 on:
   push:
@@ -68,14 +68,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2D425455AB684861B9B61795AA40889C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F29275B664D2463B8DEA44E6271EDEA7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F85356F4B70F47979F1D571990D4CDC0 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_59E057A10F7343CFB74B7CAEC82A67FE }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BC304CD82D4248E3A2AD04ED0A87B831 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C89E1E09C31C4C01BAFC2A5089DBA1A9 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'vozear'
+          app-name: 'Vozear'
           slot-name: 'Production'
           
