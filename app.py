@@ -6,36 +6,39 @@ import edge_tts
 import fitz
 import time
 import threading
+import io
+from dotenv import load_dotenv
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
+from msrest.authentication import CognitiveServicesCredentials
+
+load_dotenv()
 
 app = Flask(__name__)
 AUDIO_FOLDER = "audio"
+ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff'}
+
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a59277976e9c00c59914b53f5abef33cfa67669a3661d'
 
 os.makedirs(AUDIO_FOLDER, exist_ok=True)
 
-TEMPO_RETENCAO_SEGUNDOS_TESTE = 60 * 5  # Manter arquivos por 5 minuto para teste
+TEMPO_RETENCAO_SEGUNDOS_TESTE = 60 * 5
+
 
 def limpar_arquivos_temporarios():
     while True:
         agora = datetime.now()
-        arquivos_excluidos = 0
         for nome_arquivo in os.listdir(AUDIO_FOLDER):
             caminho_arquivo = os.path.join(AUDIO_FOLDER, nome_arquivo)
             try:
                 data_modificacao = datetime.fromtimestamp(os.path.getmtime(caminho_arquivo))
                 if agora - data_modificacao > timedelta(seconds=TEMPO_RETENCAO_SEGUNDOS_TESTE):
                     os.remove(caminho_arquivo)
-                    print(f"Arquivo temporário excluído: {caminho_arquivo}")
-                    arquivos_excluidos += 1
             except Exception as e:
                 print(f"Erro ao verificar/excluir arquivo {nome_arquivo}: {e}")
-        if arquivos_excluidos > 0:
-            print(f"Rotina de limpeza: {arquivos_excluidos} arquivos excluídos.")
-        time.sleep(120)  # Executar a cada 120 segundos
+        time.sleep(120)
 
 thread_limpeza = threading.Thread(target=limpar_arquivos_temporarios, daemon=True)
 thread_limpeza.start()
-
 
 def extrair_texto_pdf(caminho_pdf):
     documento = fitz.open(caminho_pdf)
@@ -44,43 +47,93 @@ def extrair_texto_pdf(caminho_pdf):
         texto += pagina.get_text()
     return texto
 
-# Função para exibir a página sobre o aplicativo
+def extrair_imagens_pdf(caminho_pdf):
+    documento = fitz.open(caminho_pdf)
+    imagens = []
+    for page in documento:
+        imagens_da_pagina = page.get_images(full=True)
+        for img in imagens_da_pagina:
+            xref = img[0]
+            base_image = documento.extract_image(xref)
+            imagens.append(base_image["image"])
+    return imagens
+
+def descrever_imagem_azure(image_bytes):
+    endpoint = os.getenv("AZURE_CV_ENDPOINT")
+    key = os.getenv("AZURE_CV_KEY")
+
+    client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
+
+    try:
+        analysis = client.describe_image_in_stream(io.BytesIO(image_bytes), language="pt")
+        if analysis.captions:
+            return analysis.captions[0].text
+        else:
+            return "Imagem encontrada, mas sem descrição."
+    except Exception as e:
+        print(f"Erro ao descrever imagem: {e}")
+        return "Erro ao processar imagem."
+
 @app.route("/sobre")
 def sobre():
     return render_template("sobre.html")
 
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     audio_file = None
-
     if request.method == "POST":
         texto = request.form.get("texto")
         arquivo = request.files.get("arquivo")
+        texto_final = ""
+        url = request.form.get("url")
+        if url:
+            try:
+                import requests
+                from bs4 import BeautifulSoup
+
+                response = requests.get(url, timeout=10)
+                soup = BeautifulSoup(response.content, "html.parser")
+
+                # Tenta extrair o conteúdo principal
+                artigos = soup.find_all(["article", "p", "h1", "h2"])
+                texto_extraido = "\n".join([tag.get_text() for tag in artigos if tag.get_text().strip()])
+                texto_final = texto_extraido if texto_extraido else "Não foi possível extrair conteúdo legível do site."
+            except Exception as e:
+                texto_final = f"Ocorreu um erro ao acessar a URL: {str(e)}"
+
         if texto and texto.strip():
             texto_final = texto
         elif arquivo:
-            caminho_pdf = os.path.join(AUDIO_FOLDER, arquivo.filename)
-            arquivo.save(caminho_pdf)
-            texto_final = extrair_texto_pdf(caminho_pdf)
-        else:
-            texto_final = None
+            extensao = os.path.splitext(arquivo.filename)[1].lower()
+            caminho_arquivo = os.path.join(AUDIO_FOLDER, arquivo.filename)
+            arquivo.save(caminho_arquivo)
+
+            if extensao == '.pdf':
+                texto_extraido = extrair_texto_pdf(caminho_arquivo)
+                texto_final += texto_extraido
+                imagens = extrair_imagens_pdf(caminho_arquivo)
+                for idx, img_bytes in enumerate(imagens, start=1):
+                    descricao = descrever_imagem_azure(img_bytes)
+                    texto_final += f"\nDescrição da imagem {idx}: {descricao}\n"
+            elif extensao in ALLOWED_IMAGE_EXTENSIONS:
+                with open(caminho_arquivo, "rb") as img_file:
+                    image_bytes = img_file.read()
+                    descricao = descrever_imagem_azure(image_bytes)
+                    texto_final = f"Descrição da imagem: {descricao}"
+            else:
+                texto_final = "Formato de arquivo não suportado."
 
         if texto_final:
             nome_arquivo = f"audio_{datetime.now().strftime('%Y%m%d%H%M%S')}.mp3"
             caminho = os.path.join(AUDIO_FOLDER, nome_arquivo)
-
             voice = request.form.get("voz", "pt-BR-AntonioNeural")
             rate = request.form.get("velocidade", "+0%")
-
             async def gerar_audio():
                 try:
                     communicate = edge_tts.Communicate(texto_final, voice, rate=rate)
                     await communicate.save(caminho)
-                    print(f"Áudio gerado: {caminho}")
                 except Exception as e:
                     print(f"Erro ao gerar áudio: {e}")
-
             asyncio.run(gerar_audio())
             audio_file = nome_arquivo
 
@@ -89,6 +142,10 @@ def index():
 @app.route("/audio/<filename>")
 def audio(filename):
     return send_from_directory(AUDIO_FOLDER, filename)
+
+@app.route("/som/sucesso")
+def som_sucesso():
+    return send_from_directory('static', 'sucesso.mp3')
 
 if __name__ == "__main__":
     app.run()
