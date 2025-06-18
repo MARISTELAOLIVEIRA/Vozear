@@ -1,65 +1,351 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <title>Vozear</title>
+  <meta charset="UTF-8">
+  <title>Vozear</title>
     <link rel="stylesheet" href="/static/style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width" />
+    <title>Vozear</title>
+    <!--Mi estilo-->
+    <link rel="stylesheet" type="text/css" href="https://pixmy.github.io/style.css">
+    <!--Font awesome-->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/master/devicon.min.css">
+    <!--FONTS-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Arvo:700" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:900" rel="stylesheet"> 
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
 
-    <style>
-        .dark-mode-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            font-size: 14px;
-        }
-    </style>
+
+    <link rel="stylesheet" type="text/css" href="https://pixmy.github.io/toggles-full.css">
+    <!--JQUERY-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!--Animate-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-visible/1.2.0/jquery.visible.min.js" type="text/javascript"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.4/TweenMax.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toggles/2.0.4/toggles.min.js"></script>
 </head>
+
+
 <body>
+    
+    <div class="background"></div>
+        <div class="toggle toggle-soft"></div>
+    <div class="hire" id="hire"><i class="fa fa-handshake-o animated swing infinite"></i>
+        <div class="info display"><div class="correo">
+            <span class="ingles">maristela.4603@df.senac.br</span>
+        <p>Maristela Oliveira</p></div>
+            <div class="tel"><i class="fa"></i></div>
+        </div>
+        <button style="position: absolute; top: 50px; right: 10px; color:white;" onclick="window.location.href='{{ url_for('index')}}'">Home</button> 
+        <span class="ingles">Contato</span>
+    </div>
+
+        <div class="start">
+
+        <div class='box'>
+            <div class='wave -one'></div>
+            <div class='wave -two'></div>
+            <div class='wave -three'></div>
+        </div>
+            <div class="line"></div>
+            <div class="line2"></div>
+            <div class="center">
+                <div class="nombre animated fadeInLeft"><p>VO</p><p>ZE</p><p>AR</p></div>
+                <div class="iam animated fadeInLeft" style="background-color: rgb(18, 49, 36);">
+                
+                <span class="ingles"><img src="{{ url_for('static', filename='senac.png') }}" alt="Senac" style="width: 50px; height: auto;"><span style="color: rgb(239, 120, 8); font-weight: bold; ">SENAC DF</span></span></div>
+            </div>
+        </div>
+
+    <div class="body" id="body"> 
+        <div class="square" id="first">
+            <div class="squareTitle">
+                
+                <span class="ingles">Sobre</span>
+                <span class="squareSubTitle ingles">Olá!</span>
+                
+            </div>
+            <div class="squareImage show1 hidden"><img class="image yo" src="{{ url_for('static', filename='logo.png') }}" style="background-color:white;"></div>
+            <div class="squareText sobreMi show1 hidden">
+                
+                <p class="ingles">              
+                    O<strong> Vozear</strong> é um projeto desenvolvido por mim, <strong>Maristela Oliveira</strong>, docente nos cursos de Tecnologia da Informação do <strong style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</strong>, 
+        em parceria com o aluno <strong>Marcos Antônio</strong>. A iniciativa nasceu da necessidade real de tornar o conteúdo digital mais acessível, especialmente para pessoas com deficiência visual, como é o caso do próprio Marcos — que participou ativamente na análise de requisitos e testes da ferramenta.</p>
+            </div>
+        </div>
+
+        <div class="square" id="second">
+            <div class="squareTitleRight">
+                
+                <span class="ingles">Tecnologias</span>
+                
+                <span class="squareSubTitle ingles">Utilizadas</span>
+            </div>
+            <div class="squareText show2 hidden " >
+                <div class="habilidades">
+                    <div class="habilidad show2 hidden" >
+                        <div class="habilidadIcon"  >
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='html5-original.svg') }}">
+                            </svg>
+                        </div>
+                        
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='css3-original.svg') }}">                            </svg>
+                        </div>
+                        
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='javascript-original.svg') }}">                            </svg>
+                        </div>
+                        
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='python-original.svg') }}">
+                            </svg>
+                        </div>
+                       
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='flask-original.svg') }}">                            
+                            </svg>
+                        </div>
+                        
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='azure-original.svg') }}">                               </svg>
+                        </div>
+                        
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='github-original.svg') }}">                               </svg>
+                        </div>
+                        
+                    </div>
+
+                    <div class="habilidad show2 hidden">
+                        <div class="habilidadIcon">
+                            <svg viewBox="0 0 128 128">
+                                <img src="{{ url_for('static', filename='canva-original.svg') }}">                               </svg>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="square" id="third">
+            <div class="squareTitleRight">
+                
+                <span class="ingles">Objetivo</span>
+                <span class="squareSubTitle">Recursos</span></div>
+            <div class="squareText trabajo show3 hidden">
+                <p>
+                
+                <p class="ingles">
+        O Principal objetivo é facilitar o acesso à informação através da conversão de texto📄 em áudio🔊 - ou áudio em texto - </strong>, 
+        oferecendo uma alternativa moderna e inclusiva para quem prefere ouvir em vez de ler — sejam estudantes, 
+        profissionais ou qualquer pessoa com esse perfil de consumo de conteúdo. </p>
+        <p>Entre os recursos disponíveis, o usuário pode:</p>
+                    <p></p>
+        <p>✔️ Inserir texto manualmente</p>
+        <p>✔️ Enviar arquivos PDF com ou sem imagens</p>
+        <p>✔️ Usar a própria voz ativando o microfone</p>
+        <p>✔️ Enviar imagens, (vários formatos) que serão descritas automaticamente por IA</p>
+        <p>✔️ Inserir uma URL para que o sistema leia o conteúdo da página</p>
+        <p>✔️ Escolher diferentes vozes</p>
+        <p>✔️ Ajustar a velocidade da leitura</p>
+        <p>✔️ Fazer o download do áudio gerado (disponível por 10 minutos após a conversão)</p>
+                </p>
+                    <p></p>
+                    <p></p>
+        
+                </p>
+            </div>
+            <div class="squareImage show3 hidden"><img class="image sqljudge" src="{{ url_for('static', filename='notev.gif') }}"></div>
+        </div>
+
+        <div class="square" id="fourth">
+            <div class="squareTitle"><span class="squareSubTitle">Mais...</span></div>
+            <div class="squareImage show4 hidden"><img class="image yo ps4" src="{{ url_for('static', filename='azure-original.svg') }}"></div>
+            <div class="squareText trabajo show4 hidden">
+                <p>
+                    
+                    <p class="ingles">
+        O VOZEAR também utiliza a inteligência artificial do <strong>Azure Computer Vision</strong>, 
+        um serviço da Microsoft capaz de analisar e descrever imagens automaticamente. 
+        Isso permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, 
+        gerando uma descrição em texto que é posteriormente convertida em áudio. Esse recurso é essencial para 
+        ampliar a acessibilidade de conteúdos visuais para pessoas com deficiência visual.</p>
+        <p>A aplicação utiliza a tecnologia de <strong>síntese de voz da Microsoft</strong>, com vozes naturais e de alta qualidade. 
+                </p>
+            </div>
+        </div>
+
+        <div class="square" id="third">
+            <div class="squareTitleRight">
+                
+                <span class="ingles">Conclusão</span>
+                <span class="squareSubTitle">Inclusão</span></div>
+            <div class="squareText trabajo show3 hidden">
+                <p>
+                    <p class="ingles"> Este projeto também é profundamente pessoal. Tenho Dupla excepcionalidade – O Transtorno do Espectro Autista e Altas Habilidades ou Superdotação, 
+        além disso convivo com o TPAC (Transtorno do Processamento Auditivo Central), o que faz com que meu processo de aprendizagem seja diferente da maioria das pessoas. 
+        A Inteligência Artificial tem sido uma grande aliada na minha jornada de aprendizado — e o VOZEAR é fruto direto dessa conexão entre tecnologia e inclusão.</p>
+                    <p></p>
+                    <p class="ingles">Espero que o VOZEAR possa ser uma ferramenta útil para você.
+                    
+                </p>
+            </div>
+            <div class="squareImage show5 hidden"><img class="image school" src="{{ url_for('static', filename='autismo.png') }}"></div>
+        </div>
+
+        <div class="square" id="comments">
+             <div class="squareTitle">
+                
+                <span class="ingles">Comente</span>
+                <span class="squareSubTitle ingles">O que as pessoas estão falando?</span>
+                
+            </div>
+            <div class="squareImage"><img class="image comentario" src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/bubble-icon.png"></div>
+            <div class="squareText">
+                <script>
+                var idcomments_acct = '6603e8b423792557b112ef5ac40c0903';
+                var idcomments_post_id;
+                var idcomments_post_url;
+                </script>
+                <span id="IDCommentsPostTitle" style="display:none"></span>
+                <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+
+</html>
+<!-- partial -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Dark mode (seu código existente)
-        if (localStorage.getItem("dark-mode") === "true") {
-            document.body.classList.add("dark-mode");
+var firmacount = 0;
+    $(document).ready(function(){
+        
+        
+        $(function(){
+          // get hash value
+          var hash = window.location.hash;
+          // now scroll to element with that id
+          $('html, body').animate({ scrollTop: $(hash).offset().top });
+        });
+        
+        var altura = $(".body").height();
+        var ancho = $(".body").width();
+
+        $(".start").css("height",altura+"px");
+        $(".start").css("width",ancho+"px");
+        $("#first").css("margin-top",altura+"px");
+
+        $("#hire").on("click", function(){
+            $(this).toggleClass("hireClick");
+            $('.info').toggleClass("displaySee");
+        });
+
+       
+
+
+        
+    });
+
+    $(window).resize(function(){
+        var altura = $(".body").height();
+        var ancho = $(".body").width();
+
+        $(".start").css("height",altura+"px");
+        $(".start").css("width",ancho+"px");
+        $("#first").css("margin-top",altura+"px");
+    });
+
+    $( ".body" ).scroll(function() {
+        if ($('.line').visible(true,true)) {
+            $(".background").css("background", "linear-gradient(#2ecc71,rgb(24, 179, 148))");
         }
 
-        const darkModeToggle = document.querySelector('.dark-mode-toggle');
-        if (darkModeToggle) {
-            darkModeToggle.addEventListener('click', toggleDarkMode);
+        if ($('.show1').visible(false,true)) {
+            $('.show1').addClass("animated slideInLeft visible");
+            $('.show1').removeClass("hidden");
+            $(".background").css("background", "linear-gradient(#ecf0f1, #7f8c8d)");
         }
 
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
-            localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+        if ($('.show2').visible(true,true)) {
+            $('.show2').addClass("animated slideInRight visible");
         }
 
+        if ($('.show3').visible(true,true)) {
+            $('.show3').addClass("animated slideInLeft visible");
+            $(".background").css("background", "linear-gradient(#1abc9c,rgb(12, 237, 192))");
+        }
+
+        if ($('.show4').visible(true,true)) {
+            $('.show4').addClass("animated slideInRight visible");
+            $(".background").css("background", "linear-gradient(#9b59b6, #34495e)");
+        }
+
+        if ($('.show5').visible(true,true)) {
+            $('.show5').addClass("animated slideInRight visible");
+            $(".background").css("background", "linear-gradient(#7f8c8d,#e74c3c)");
+        }
+
+        if($(".firma").visible(true)&& firmacount == 0){
+            firmacount = 0;
+            var paths = $('#svg4166 path:not(defs path)');
+            paths.each(function(i, e) {
+                e.style.strokeDasharray = e.style.strokeDashoffset = e.getTotalLength();
+            });
+            var tl = new TimelineMax();
+            tl.add([
+                TweenLite.to(paths.eq(0), 4, {
+                    strokeDashoffset: 0,
+                    delay: 0.0,
+                    autoAlpha: 1
+                })
+            ]);
+        }
     });
 </script>
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
-<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('index') }}'">Início</button>
 
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
-    <div style="text-align: justify;">
-    <p>O <span style="color: rgb(29, 79, 29); font-weight: bold;">VOZEAR</span> é um projeto desenvolvido por mim, Maristela Oliveira, 
-        🎓docente nos cursos de tecnologia da informação e o aluno Marcos Antônio no <span style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</span>, com o objetivo de facilitar o acesso à informação através da conversão de texto📄 em áudio🔊.</p>
-    <p>O projeto foi inspirado na necessidade do Marcos, que é deficiente visual. Eu precisei tornar o conteúdo digital mais acessível e o Marcos auxiliou na análise de requisitos e testes. 
-        O intuito é oferecer uma alternativa para estudantes que preferem ouvir o conteúdo em vez de lê-lo.</p>
-    <p>O <span style="color: rgb(29, 79, 29); font-weight: bold;">VOZEAR</span> utiliza a tecnologia de síntese de voz da Microsoft, que oferece vozes naturais e de alta qualidade. 
-        É uma ferramenta útil para estudantes, profissionais e qualquer pessoa que deseje consumir informações de forma mais acessível. 
-        Ele suporta a conversão de textos digitados diretamente na interface ou enviados como arquivos PDF, além de permitir escolher entre diferentes vozes e ajustar a velocidade da leitura. 
-        O arquivo de áudio gerado fica disponível para download por 10 minutos após a conversão, depois será deletado automaticamente para não sobrecarregar o servidor.</p>
-    <p>Esse projeto foi desenvolvido em Python🐍 com o framework web Flask🌶️, garantindo uma interface simples e intuitiva. 
-        O deploy foi feito no Azure, em uma conta educacional utilizando o recurso de Aplicativo Web, o que garante um ambiente seguro e confiável.
-        A implantação está sendo feita através do repositório no GitHub Pró Education, onde o código fonte está disponível para consulta e colaboração. 
-        O logotipo foi desenvolvido por mim utilizando a IA do Canva educacional e é uma representação visual do projeto <span style="color: rgb(29, 79, 29); font-weight: bold;">VOZEAR</span>.</p>
-    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato: <a href="https://github.com/MARISTELAOLIVEIRA">GitHub</a> | maristela.4603@df.senac.br</p>
-</div>
-<footer>
-    &copy; Maristela | Senac DF 🐍 🌶️ 2025 v 1.2
-</footer>
 </body>
 </html>
