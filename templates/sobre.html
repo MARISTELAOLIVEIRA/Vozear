@@ -76,12 +76,12 @@
             <div class="squareText sobreMi show1 hidden">
                 
                 <p class="fontemediun">              
-                    O<strong> Vozear</strong> é um projeto desenvolvido por mim, <strong>Maristela Oliveira</strong>, docente nos cursos de Tecnologia da Informação do <strong style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</strong>, 
-        em parceria com o aluno <strong>Marcos Antônio</strong>. A iniciativa nasceu da necessidade real de tornar o conteúdo digital mais acessível, especialmente para pessoas com deficiência visual, como é o caso do próprio Marcos — que participou ativamente na análise de requisitos e testes da ferramenta.</p>
-        <br>
-        <br>
-        <br>
-
+        O<strong> Vozear</strong> é um projeto desenvolvido por mim, <strong>Maristela Oliveira</strong>, docente nos cursos de Tecnologia da Informação do <strong style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</strong>, 
+        em parceria com o aluno <strong>Marcos Antônio</strong>. A iniciativa nasceu da necessidade real de tornar o conteúdo digital mais acessível, especialmente para pessoas com deficiência visual, 
+        como é o caso do próprio Marcos — que participou ativamente na análise de requisitos e testes da ferramenta.</p>
+        <p class="fontemediun">  Esse projeto foi desenvolvido em Python🐍 com o framework web Flask🌶️, garantindo uma interface simples e intuitiva. 
+        O deploy foi feito no Azure, em uma conta educacional utilizando o recurso de Aplicativo Web, o que garante um ambiente seguro e confiável. 
+        A implantação está sendo feita através do repositório no GitHub Pró Education, onde o código fonte está disponível para consulta e colaboração. O logotipo foi desenvolvido por mim utilizando a IA do Canva educacional.</p>
             </div>
         </div>
 
@@ -104,7 +104,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            CCS3
+                            CSS3
                             <img src="{{ url_for('static', filename='css3-original.svg') }}" alt="CSS3 logo consisting of a stylized blue shield with a white number 3 in the center, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
@@ -112,7 +112,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            JavaScript
+                            JAVASCRIPT
                             <img src="{{ url_for('static', filename='javascript-original.svg') }}" alt="JavaScript logo consisting of a stylized yellow shield with a black number 1 in the center, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
@@ -120,7 +120,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            Python
+                            PYTHON
                             <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python logo consisting of a stylized blue and yellow snake, representing programming language technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                        
@@ -128,7 +128,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            Flask
+                            FLASK
                             <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask logo consisting of a stylized blue flask, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
@@ -136,7 +136,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            Azure Education
+                            AZURE
                             <img src="{{ url_for('static', filename='azure-original.svg') }}" alt="Azure logo consisting of a stylized blue cloud, representing cloud computing technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
@@ -144,7 +144,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            GitHub Education
+                            GITHUB
                             <img src="{{ url_for('static', filename='github-original.svg') }}" alt="GitHub logo consisting of a stylized black cat, representing version control technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
@@ -152,7 +152,7 @@
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            Canva Education
+                            CANVA
                                 <img src="{{ url_for('static', filename='canva-original.svg') }}" alt="Canva logo consisting of a stylized letter C, representing graphic design technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                        
@@ -279,10 +279,16 @@ var firmacount = 0;
             $('.info').toggleClass("displaySee");
         });
 
-       
+       ingles();
 
+        $('.toggle').on('toggle', function(e, active) {
+          if (active) {
+            ingles();
+          } else {
+            espanol();
+          }
+        });
 
-        
     });
 
     $(window).resize(function(){
