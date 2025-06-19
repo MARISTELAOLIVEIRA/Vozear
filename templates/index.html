@@ -45,8 +45,8 @@
 <button style="position: absolute; top: 50px; right: 10px" onclick="window.location.href='{{ url_for('sobre') }}'">Sobre</button> 
 
 <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
-<h1>Conversor de Texto📄 para Áudio🔊</h1>
-<h2><img src="{{ url_for('static', filename='senac.png') }}" alt="Senac" style="width: 50px; height: auto;"><span style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</span></h2>
+<h1>Converta seu Texto📄 para Áudio🔊</h1>
+<p>Grave seu áudio e converta em texto ou envie uma imagem para ser descrita.</p>
 <p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
 
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
@@ -89,11 +89,9 @@
     </audio>
     <p><a href="{{ url_for('audio', filename=audio_file) }}" download>✅ Áudio gerado com sucesso! ⬇️ BAIXAR MP3</a></p>
 {% endif %}
-
 <footer>
-    &copy; Maristela | Senac DF 🐍 🌶️ 2025 v 1.2
+    &copy; Maristela 🐍 🌶️ 2025 v 2.0
 </footer>
-
 <script>
     function mostrarProgresso() {
         document.getElementById("barra").style.display = "block";
