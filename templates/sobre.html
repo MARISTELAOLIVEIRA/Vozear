@@ -2,16 +2,10 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
   <title>Vozear</title>
     <link rel="stylesheet" href="/static/style.css">
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<head>
-    <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width" />
-    <title>Vozear</title>
     <!--Mi estilo-->
     <link rel="stylesheet" type="text/css" href="https://pixmy.github.io/style.css">
     <!--Font awesome-->
@@ -28,15 +22,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
-
-
     <link rel="stylesheet" type="text/css" href="https://pixmy.github.io/toggles-full.css">
     <!--JQUERY-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!--Animate-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-visible/1.2.0/jquery.visible.min.js" type="text/javascript"></script>
-
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.4/TweenMax.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toggles/2.0.4/toggles.min.js"></script>
 </head>
@@ -67,9 +58,9 @@
             <div class="line2"></div>
             <div class="center">
                 <div class="nombre animated fadeInLeft"><p>VO</p><p>ZE</p><p>AR</p></div>
-                <div class="iam animated fadeInLeft" style="background-color: rgb(18, 49, 36);">
+                <div class="iam animated fadeInLeft" >
                 
-                <span class="ingles"><img src="{{ url_for('static', filename='senac.png') }}" alt="Senac" style="width: 50px; height: auto;"><span style="color: rgb(239, 120, 8); font-weight: bold; ">SENAC DF</span></span></div>
+                <span class="ingles">INCLUSÃO</span></div>
             </div>
         </div>
 
@@ -84,9 +75,13 @@
             <div class="squareImage show1 hidden"><img class="image yo" src="{{ url_for('static', filename='logo.png') }}" style="background-color:white;"></div>
             <div class="squareText sobreMi show1 hidden">
                 
-                <p class="ingles">              
+                <p class="fontemediun">              
                     O<strong> Vozear</strong> é um projeto desenvolvido por mim, <strong>Maristela Oliveira</strong>, docente nos cursos de Tecnologia da Informação do <strong style="color: rgb(239, 120, 8); font-weight: bold;">SENAC DF</strong>, 
         em parceria com o aluno <strong>Marcos Antônio</strong>. A iniciativa nasceu da necessidade real de tornar o conteúdo digital mais acessível, especialmente para pessoas com deficiência visual, como é o caso do próprio Marcos — que participou ativamente na análise de requisitos e testes da ferramenta.</p>
+        <br>
+        <br>
+        <br>
+
             </div>
         </div>
 
@@ -101,67 +96,56 @@
                 <div class="habilidades">
                     <div class="habilidad show2 hidden" >
                         <div class="habilidadIcon"  >
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='html5-original.svg') }}">
-                            </svg>
+                            <img src="{{ url_for('static', filename='html5-original.svg') }}" alt="HTML5 logo consisting of a stylized orange shield with a white number 5 in the center, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='css3-original.svg') }}">                            </svg>
+                            <img src="{{ url_for('static', filename='css3-original.svg') }}" alt="CSS3 logo consisting of a stylized blue shield with a white number 3 in the center, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='javascript-original.svg') }}">                            </svg>
+                            <img src="{{ url_for('static', filename='javascript-original.svg') }}" alt="JavaScript logo consisting of a stylized yellow shield with a black number 1 in the center, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='python-original.svg') }}">
-                            </svg>
+                            <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python logo consisting of a stylized blue and yellow snake, representing programming language technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                        
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='flask-original.svg') }}">                            
-                            </svg>
+                            <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask logo consisting of a stylized blue flask, representing web development technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='azure-original.svg') }}">                               </svg>
+                            <img src="{{ url_for('static', filename='azure-original.svg') }}" alt="Azure logo consisting of a stylized blue cloud, representing cloud computing technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='github-original.svg') }}">                               </svg>
+                            <img src="{{ url_for('static', filename='github-original.svg') }}" alt="GitHub logo consisting of a stylized black cat, representing version control technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                         
                     </div>
 
                     <div class="habilidad show2 hidden">
                         <div class="habilidadIcon">
-                            <svg viewBox="0 0 128 128">
-                                <img src="{{ url_for('static', filename='canva-original.svg') }}">                               </svg>
+                                <img src="{{ url_for('static', filename='canva-original.svg') }}" alt="Canva logo consisting of a stylized letter C, representing graphic design technology. The logo appears bold and modern, conveying a sense of innovation and reliability. No additional text or background elements are present.">
                         </div>
                        
                     </div>
@@ -175,22 +159,21 @@
                 <span class="ingles">Objetivo</span>
                 <span class="squareSubTitle">Recursos</span></div>
             <div class="squareText trabajo show3 hidden">
-                <p>
-                
-                <p class="ingles">
-        O Principal objetivo é facilitar o acesso à informação através da conversão de texto📄 em áudio🔊 - ou áudio em texto - </strong>, 
+                <br>
+                <p class="fontemediun">
+        O Principal objetivo é facilitar o acesso à informação através da conversão de texto📄 em áudio🔊 - ou áudio em texto -
         oferecendo uma alternativa moderna e inclusiva para quem prefere ouvir em vez de ler — sejam estudantes, 
         profissionais ou qualquer pessoa com esse perfil de consumo de conteúdo. </p>
-        <p>Entre os recursos disponíveis, o usuário pode:</p>
-                    <p></p>
-        <p>✔️ Inserir texto manualmente</p>
-        <p>✔️ Enviar arquivos PDF com ou sem imagens</p>
-        <p>✔️ Usar a própria voz ativando o microfone</p>
-        <p>✔️ Enviar imagens, (vários formatos) que serão descritas automaticamente por IA</p>
-        <p>✔️ Inserir uma URL para que o sistema leia o conteúdo da página</p>
-        <p>✔️ Escolher diferentes vozes</p>
-        <p>✔️ Ajustar a velocidade da leitura</p>
-        <p>✔️ Fazer o download do áudio gerado (disponível por 10 minutos após a conversão)</p>
+        <p class="fontemediun">Entre os recursos disponíveis, o usuário pode:</p>
+        <p></p>
+        <p class="fontemediun">✔️ Inserir texto manualmente</p>
+        <p class="fontemediun">✔️ Enviar arquivos PDF com ou sem imagens</p>
+        <p class="fontemediun">✔️ Usar a própria voz ativando o microfone</p>
+        <p class="fontemediun">✔️ Enviar imagens que serão descritas automaticamente por IA</p>
+        <p class="fontemediun">✔️ Inserir uma URL para que o sistema leia o conteúdo da página</p>
+        <p class="fontemediun">✔️ Escolher diferentes vozes</p>
+        <p class="fontemediun">✔️ Ajustar a velocidade da leitura</p>
+        <p class="fontemediun">✔️ Fazer o download do áudio gerado (disponível por 10 minutos após a conversão)</p>
                 </p>
                     <p></p>
                     <p></p>
@@ -204,15 +187,14 @@
             <div class="squareTitle"><span class="squareSubTitle">Mais...</span></div>
             <div class="squareImage show4 hidden"><img class="image yo ps4" src="{{ url_for('static', filename='azure-original.svg') }}"></div>
             <div class="squareText trabajo show4 hidden">
-                <p>
                     
-                    <p class="ingles">
+                    <p class="fontemediun">
         O VOZEAR também utiliza a inteligência artificial do <strong>Azure Computer Vision</strong>, 
         um serviço da Microsoft capaz de analisar e descrever imagens automaticamente. 
         Isso permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, 
         gerando uma descrição em texto que é posteriormente convertida em áudio. Esse recurso é essencial para 
         ampliar a acessibilidade de conteúdos visuais para pessoas com deficiência visual.</p>
-        <p>A aplicação utiliza a tecnologia de <strong>síntese de voz da Microsoft</strong>, com vozes naturais e de alta qualidade. 
+        <p class="fontemediun">A aplicação utiliza a tecnologia de <strong>síntese de voz da Microsoft</strong>, com vozes naturais e de alta qualidade. 
                 </p>
             </div>
         </div>
@@ -224,11 +206,11 @@
                 <span class="squareSubTitle">Inclusão</span></div>
             <div class="squareText trabajo show3 hidden">
                 <p>
-                    <p class="ingles"> Este projeto também é profundamente pessoal. Tenho Dupla excepcionalidade – O Transtorno do Espectro Autista e Altas Habilidades ou Superdotação, 
+                    <p class="fontemediun"> Este projeto também é profundamente pessoal. Tenho Dupla excepcionalidade – O Transtorno do Espectro Autista e Altas Habilidades ou Superdotação, 
         além disso convivo com o TPAC (Transtorno do Processamento Auditivo Central), o que faz com que meu processo de aprendizagem seja diferente da maioria das pessoas. 
         A Inteligência Artificial tem sido uma grande aliada na minha jornada de aprendizado — e o VOZEAR é fruto direto dessa conexão entre tecnologia e inclusão.</p>
                     <p></p>
-                    <p class="ingles">Espero que o VOZEAR possa ser uma ferramenta útil para você.
+                    <p class="fontemediun">Espero que o VOZEAR possa ser uma ferramenta útil para você.
                     
                 </p>
             </div>
@@ -253,12 +235,11 @@
                 <script type='text/javascript' src='https://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
             </div>
         </div>
-
+    <footer style="font-size:15px">
+    &copy; Maristela 🐍 🌶️ 2025 v 2.0
+</footer>
     </div>
-</body>
 
-
-</html>
 <!-- partial -->
 <script>
 var firmacount = 0;
