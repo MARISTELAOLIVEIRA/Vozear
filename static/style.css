@@ -81,7 +81,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 
 
 .background{
-  	background: linear-gradient(#297c4d, #50dbbf); /* Standard syntax */
+  	background: linear-gradient(#2ecc71, #16a085); /* Standard syntax */
 	top: 0;
 	left: 0;
 	right: 0;
@@ -103,7 +103,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 .hire{
 	position: fixed;
 	z-index: 999;
-	background-color: #36aa66;
+	background-color: #2ecc71;
 	border-radius: 10px;
 	padding: 1em;
 	color: white;
@@ -152,7 +152,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 }
 
 .start{
-  background-image:url("https://www.transparenttextures.com/patterns/asfalt-light.png") !important;
+  background-image:  url("https://www.transparenttextures.com/patterns/asfalt-light.png")!important;
   background-size: cover;
 	background-position: center;
 	position: fixed;
@@ -190,11 +190,11 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 	font-family: 'Raleway', sans-serif;
 	text-align: center;
 	border: 1px solid white;
-	color: #2d9057;
+	color: #2ecc71;
 	background-color: white;
 	padding: .5em;
 	border-radius: 5px;
-	border-bottom: 5px solid #229954;
+	border-bottom: 5px solid #2ecc71;
   font-size: calc(0.75em + 1.3vmin);
 }
 
@@ -267,7 +267,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 }
 
 .yo{
-	border: 12px solid #279555;
+	border: 12px solid #2ecc71;
 	border-bottom-right-radius: 50%;
 	border-top-left-radius: 50%;
 }
@@ -298,7 +298,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 	border-radius: 5%;
 	padding: .5em;
 	background-color: #fff;
-	border-bottom: 6px solid #22894d;
+	border-bottom: 6px solid #2ecc71;
 	margin: .5em;
 	display: inline-block;
 	box-shadow: 0px -0px 2px 1px rgba(45,45,45,.5);
@@ -372,11 +372,11 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 }
 
 #third a{
-	color: #238c4f;
+	color: #2ecc71;
 }
 
 #fourth{
-	background-color: #21844a;
+	background-color:#2ecc71;
 }
 
 #fourth p{
@@ -410,7 +410,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 
 .squareTitle{
 	text-align: center;
-	color: #218c4e;
+	color: #2ecc71;
 	font-family: 'Arvo', serif;
   font-size: calc(0.85em + 1.4vmin);
 	margin-left: 20%;
@@ -426,7 +426,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 
 .squareTitleRight{
 	text-align: center;
-	color: #218c4e;
+	color: #2ecc71;
 	font-family: 'Arvo', serif;
   font-size: calc(0.85em + 1.4vmin);
 	margin-right: 20%;
@@ -558,7 +558,7 @@ p{
 .wave.-three {
   animation: drift 7500ms infinite linear;
 	position: fixed;
-	background-color: #218c4e;
+	background-color: #2ecc71;
 }
 .wave.-two {
   animation: drift 3000ms infinite linear;
