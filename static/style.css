@@ -679,3 +679,17 @@ button {
 button:hover {
     background-color: #4e8d51;
 }
+footer {
+    background-color: #f0f0f0; /* Cor de fundo clara para visualização */
+    color: #333;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.8em;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box; /* Garante que padding não aumente a largura */
+    margin-top: 30px; /* Adiciona um espaço acima do rodapé */
+}
+.fontemediun {
+	font-size: 18px;	
+}
