@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - Vozear
+name: Build and deploy Python app to Azure Web App - vozear
 
 on:
   push:
@@ -48,9 +48,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
@@ -68,14 +66,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_59E057A10F7343CFB74B7CAEC82A67FE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BC304CD82D4248E3A2AD04ED0A87B831 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C89E1E09C31C4C01BAFC2A5089DBA1A9 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9F96B5F754A14220AB641D26FF3A4F0F }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_6E9C4E586F59497CBE2B6D49266648D7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A2DEC303322A4C1DB0FFD205074BA737 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'Vozear'
+          app-name: 'vozear'
           slot-name: 'Production'
           
