@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Vozear</title>
-    <link rel="stylesheet" href="/static/styleOld.css">
+    <link rel="stylesheet" href="/static/css/styleOld.css">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
@@ -44,8 +44,8 @@
 <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
 <button style="position: absolute; top: 50px; right: 10px" onclick="window.location.href='{{ url_for('sobre') }}'">Sobre</button> 
 
-<img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
-<h1>Converta seu Texto📄 para Áudio🔊</h1>
+<img   src="{{ url_for('static', filename='img/logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
+<h1>"Tecnologia que fala 🔊 com o coração ❤️"</h1>
 <p>Grave seu áudio e converta em texto ou envie uma imagem para ser descrita.</p>
 <p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
 
@@ -90,15 +90,16 @@
     <p><a href="{{ url_for('audio', filename=audio_file) }}" download>✅ Áudio gerado com sucesso! ⬇️ BAIXAR MP3</a></p>
 {% endif %}
 <footer>
-    &copy; Maristela 🐍 🌶️ 2025 v 2.0
+    &copy; Maristela 🐍 🌶️ 2025 | maristela@stela.tec.br
 </footer>
 <script>
     function mostrarProgresso() {
         document.getElementById("barra").style.display = "block";
     }
 </script>
-<script src="{{ url_for('static', filename='vozear_microfone.js') }}"></script>
-<script src="{{ url_for('static', filename='salvar_como_txt.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vozear_microfone.js') }}"></script>
+<script src="{{ url_for('static', filename='js/salvar_como_txt.js') }}"></script>
 
 </body>
 </html>
+
