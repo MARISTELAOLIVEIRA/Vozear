@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Vozear</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre - Vozear</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
@@ -10,12 +11,57 @@
     <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
 
     <style>
-        .dark-mode-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
+        .header-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .header-controls button {
+            padding: 8px 15px;
             font-size: 14px;
+            margin: 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .header-controls {
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            .header-controls button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .logo-container img {
+                max-width: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-controls button {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+            
+            .logo-container img {
+                max-width: 100px;
+            }
         }
     </style>
 </head>
@@ -39,10 +85,15 @@
 
     });
 </script>
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
-<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('index') }}'">Voltar</button>
 
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
+<div class="header-controls">
+    <button onclick="window.location.href='{{ url_for(\'index\') }}'">Voltar</button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+</div>
+
+<div class="logo-container">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo">
+</div>
     <div style="text-align: justify;">
     <p>O <span style="color: rgb(29, 79, 29); font-weight: bold;">Vozear</span> é um projeto desenvolvido por &copy; Maristela Oliveira, 🎓 docente dos cursos de tecnologia da informação no SENAC DF, com o objetivo de facilitar o acesso à informação através da conversão de texto em áudio.</p>
     <p>O projeto foi inspirado na necessidade de um aluno deficiente visual, eu precisei tornar o conteúdo digital mais acessível para pessoas com dificuldades de leitura, como dislexia ou baixa visão, além de oferecer uma alternativa para estudantes que preferem ouvir o conteúdo em vez de lê-lo.</p>
