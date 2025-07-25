@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vozear</title>
     <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
@@ -10,12 +11,65 @@
     <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
 
     <style>
-        .dark-mode-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
+        .header-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .header-controls button {
+            padding: 8px 15px;
             font-size: 14px;
+            margin: 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .logo-container img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .header-controls {
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            .header-controls button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .logo-container img {
+                max-width: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-controls button {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+            
+            .logo-container img {
+                max-width: 100px;
+            }
         }
     </style>
 </head>
@@ -39,11 +93,15 @@
 
     });
 </script>
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
-<button style="position: absolute; top: 50px; right: 10px;" onclick="window.location.href='{{ url_for('sobre') }}'">Sobre</button>
+<div class="header-controls">
+    <button onclick="window.location.href='{{ url_for(\'sobre\') }}'">Sobre</button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+</div>
 
-<img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
-<img src="{{ url_for('static', filename='logo.png') }}" alt="Senac Logo" style="width: 200px; height: auto;">
+<div class="logo-container">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo">
+    <img src="{{ url_for('static', filename='senac.png') }}" alt="Senac Logo">
+</div>
 
 <h1>Conversor de 📄 Texto para Áudio 🔊</h1>
 <p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
