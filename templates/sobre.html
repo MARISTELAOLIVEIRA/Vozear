@@ -65,7 +65,55 @@
         }
     </style>
 </head>
+
 <body>
+
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+<button style="position: absolute; top: 50px; right: 10px" onclick="window.location.href='{{ url_for('index') }}'">Início</button>
+
+<img class="logo-fixa" src="{{ url_for('static', filename='img/logo.png') }}" alt="Vozear Logo" style="width: 200px; height: auto;">
+<h1>SOBRE</h1>
+<div >
+<p> 
+    O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em>Maristela Oliveira</em>, e nasceu da necessidade real de tornar o conteúdo digital 
+    mais acessível, especialmente para pessoas com deficiência visual. Foi desenvolvido em Python🐍 com o framework web Flask🌶️.
+    <br>
+    <br>
+    A aplicação utiliza a tecnologia de síntese de voz da <span style="color: #1a8debff;">Microsoft</span>, com vozes naturais e de alta qualidade, e a inteligência artificial do <span style="color: #1a8debff;">Azure Computer Vision</span>, um serviço que analisa e descreve imagens automaticamente. Isso 
+    permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
+    posteriormente convertida em áudio.
+    <br>
+    <br>
+
+    Entre os recursos disponíveis, o usuário pode:
+    <br>
+    ✔️ Inserir texto manualmente;
+    <br>
+    ✔️ Enviar arquivos PDF com ou sem imagens;
+    <br>
+    ✔️ Usar a própria voz ativando o microfone (gerando um arquivo de texto);
+    <br>
+    ✔️ Baixar o texto gerado a partir do áudio;
+    <br>
+    ✔️ Enviar imagens que serão descritas automaticamente por IA;
+    <br>
+    ✔️ Inserir uma URL para que o sistema leia o conteúdo da página;
+    <br>
+    ✔️ Escolher diferentes vozes;
+    <br>
+    ✔️ Ajustar a velocidade da leitura;
+    <br>
+    ✔️ Ouvir o áudio gerado diretamente no navegador;
+    <br>
+    ✔️ Fazer o download dos arquivos gerados, disponível por 10 minutos após a conversão,
+    após esse período, os arquivos são removidos do servidor automaticamente para economizar espaço.
+
+</p>
+</div>
+
+<footer>
+    &copy; Maristela 🐍 🌶️ 2025 | maristela@stela.tec.br
+</footer>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Dark mode (seu código existente)
@@ -85,7 +133,6 @@
 
     });
 </script>
-
 <div class="header-controls">
     <button onclick="window.location.href='{{ url_for(\'index\') }}'" style="font-size: 8px;">Voltar</button>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>

@@ -73,6 +73,7 @@
         }
     </style>
 </head>
+
 <body>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -109,8 +110,10 @@
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
     <textarea name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50"></textarea><br><br>
 
-    <label>Ou envie um PDF:</label>
-    <input type="file" name="arquivo" accept=".pdf"><br><br>
+<label>Envie um arquivo PDF ou imagem:</label>
+<input type="file" name="arquivo" accept=".pdf,.jpg,.jpeg,.png,.bmp,.gif,.tiff"><br><br>
+<label>Ou insira uma URL:</label>
+<input type="url" name="url" placeholder="https://exemplo.com"><br><br>
 
     <label>Escolha a voz:</label>
     <select name="voz">
@@ -126,6 +129,10 @@
     </select><br><br>
 
     <button type="submit">Converter</button>
+    <button type="button" id="botao-falar">🎤 Falar</button>
+    <button type="button" id="botao-parar" style="display:none;">🛑 Parar</button>
+    <button type="button" id="botao-salvar">💾 Baixar Texto</button>
+    <button type="button" onclick="window.location.href='{{ url_for('index') }}'">🔄 Limpar</button>
 
     <div class="progress-bar" id="barra">
         <div class="progress-bar-fill"></div>
@@ -134,21 +141,23 @@
 </form>
 
 {% if audio_file %}
-    <p class="success-message">✅ Áudio gerado com sucesso!</p>
     <audio controls>
         <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
         Seu navegador não suporta áudio.
     </audio>
-    <p><a href="{{ url_for('audio', filename=audio_file) }}" download>⬇️ BAIXAR MP3</a></p>
+    <p><a href="{{ url_for('audio', filename=audio_file) }}" download>✅ Áudio gerado com sucesso! ⬇️ BAIXAR MP3</a></p>
 {% endif %}
-
 <footer>
     &copy; Maristela - SENAC-DF 🐍 🌶️ 2025 v 1.0
 </footer>
-
 <script>
     function mostrarProgresso() {
         document.getElementById("barra").style.display = "block";
     }
 </script>
+<script src="{{ url_for('static', filename='js/vozear_microfone.js') }}"></script>
+<script src="{{ url_for('static', filename='js/salvar_como_txt.js') }}"></script>
+
+</body>
 </html>
+

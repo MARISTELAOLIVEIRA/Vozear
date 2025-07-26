@@ -1,0 +1,159 @@
+html {
+    height: 100%;
+    background: linear-gradient(to right, #f0f0f0, #c0baba);
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #010a00;
+    background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+
+}
+body {
+    height: 100%;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f2f2f2;
+    color: #333;
+    text-align: left;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    height: 100%;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #1f3e20;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    font-size: 1.1em;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #2d564b;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #66bb6a;
+}
+
+audio {
+    margin-top: 20px;
+    width: 100%;
+}
+
+a {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #1f3e20;
+    font-weight: bold;
+}
+.dark-mode {
+    background-color: #121212;
+    color: #f2f2f2;
+}
+
+.dark-mode textarea {
+    background-color: #1e1e1e;
+    color: #f2f2f2;
+    border-color: #555;
+}
+
+.dark-mode button {
+    background-color: #214b41;
+    color: #f2f2f2;
+}
+
+.dark-mode a {
+    color: #2d564b;
+    font-weight: bold;
+}
+.dark-mode-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+.dark-mode h1 {
+    color: #3e7158;
+}
+.dark-mode button:hover {
+    background-color: rgb(56, 86, 60)af9;
+    color: #112231;
+}
+footer {
+    background-color: #f0f0f0; /* Cor de fundo clara para visualização */
+    color: #333;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.8em;
+	font: 1em/ 1.25 ubuntu, trebuchet ms, arial, sans-serif;    border-top: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box; /* Garante que padding não aumente a largura */
+    margin-top: 30px; /* Adiciona um espaço acima do rodapé */
+}
+.progress-bar {
+            display: none;
+            margin-top: 1rem;
+            height: 8px;
+            background-color: #ccc;
+        }
+
+        .progress-bar-fill {
+            width: 100%;
+            height: 100%;
+            background-color: #4caf50;
+            animation: load 2s infinite;
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .success-message {
+            color: green;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+#logo-fixa {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 10000;
+}
