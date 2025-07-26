@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            background: white; 
+            color: black; 
+            padding: 20px; 
+            transition: all 0.3s ease;
+        }
+        .dark-mode { 
+            background: #1a1a1a !important; 
+            color: #e0e0e0 !important; 
+        }
+        button { 
+            padding: 10px 20px; 
+            margin: 10px;
+            background: #065f46;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .dark-mode button {
+            background: #047857 !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste do Modo Escuro</h1>
+    <button onclick="testDarkMode()">🌙 ☀️ Alternar Modo</button>
+    <p>Status do localStorage: <span id="status"></span></p>
+    <p>Classes do body: <span id="classes"></span></p>
+    
+    <script>
+        function testDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            localStorage.setItem("dark-mode", isDark.toString());
+            updateStatus();
+            console.log("Dark mode:", isDark);
+        }
+        
+        function updateStatus() {
+            document.getElementById('status').textContent = localStorage.getItem("dark-mode");
+            document.getElementById('classes').textContent = document.body.className;
+        }
+        
+        // Carregar estado salvo
+        window.onload = function() {
+            if (localStorage.getItem("dark-mode") === "true") {
+                document.body.classList.add("dark-mode");
+            }
+            updateStatus();
+        }
+    </script>
+</body>
+</html>

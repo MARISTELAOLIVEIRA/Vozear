@@ -102,33 +102,75 @@ a {
 
 /* Dark mode styles */
 .dark-mode {
-    background-color: #121212;
-    color: #f2f2f2;
+    background: #1a1a1a !important;
+    background-image: none !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
 }
 
-.dark-mode textarea {
-    background-color: #1e1e1e;
-    color: #f2f2f2;
-    border-color: #555;
-}
-
-.dark-mode button {
-    background-color: #214b41;
-    color: #f2f2f2;
-}
-
-.dark-mode a {
-    color: #2d564b;
-    font-weight: bold;
+.dark-mode::before {
+    content: "🌙";
+    background: linear-gradient(45deg, #4A5568, #2D3748) !important;
+    border-color: #4A5568 !important;
+    box-shadow: 0 2px 10px rgba(74,85,104,0.5) !important;
 }
 
 .dark-mode h1 {
-    color: #3e7158;
+    color: #4ade80 !important;
+}
+
+.dark-mode p {
+    color: #d1d5db !important;
+}
+
+.dark-mode label {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode textarea {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode select, 
+.dark-mode input[type="file"], 
+.dark-mode input[type="url"] {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode button {
+    background-color: #065f46 !important;
+    color: #e0e0e0 !important;
 }
 
 .dark-mode button:hover {
-    background-color: #2d5630;
-    color: #f2f2f2;
+    background-color: #047857 !important;
+}
+
+.dark-mode a {
+    color: #10b981 !important;
+    font-weight: bold;
+}
+
+.dark-mode footer {
+    background-color: #1f2937 !important;
+    color: #d1d5db !important;
+    border-top-color: #374151 !important;
+}
+
+.dark-mode select, .dark-mode input[type="file"], .dark-mode input[type="url"] {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+}
+
+.dark-mode footer {
+    background-color: #1e1e1e !important;
+    color: #f2f2f2 !important;
+    border-top-color: #555 !important;
 }
 
 /* Dark mode toggle button */
@@ -353,30 +395,6 @@ input[type="file"] {
     font-size: 1em;
     box-sizing: border-box;
     margin-bottom: 10px;
-}
-
-.dark-mode .url-input {
-    background-color: #1e1e1e;
-    color: #f2f2f2;
-    border-color: #555;
-}
-
-.dark-mode input[type="url"] {
-    background-color: #1e1e1e;
-    color: #f2f2f2;
-    border-color: #555;
-}
-
-.dark-mode select {
-    background-color: #1e1e1e;
-    color: #f2f2f2;
-    border-color: #555;
-}
-
-.dark-mode input[type="file"] {
-    background-color: #1e1e1e;
-    color: #f2f2f2;
-    border-color: #555;
 }
 
 /* Estilos para botões de funcionalidades adicionais */
