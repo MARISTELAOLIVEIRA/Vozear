@@ -95,7 +95,9 @@
     });
 </script>
 <div class="header-controls">
-    <button onclick="window.location.href='{{ url_for(\'sobre\') }}'" style="font-size: 8px;">Sobre</button>
+    <form style="display: inline;" action="{{ url_for('sobre') }}" method="get">
+        <button type="submit" style="font-size: 8px;">Sobre</button>
+    </form>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
 </div>
 
@@ -132,7 +134,9 @@
     <button type="button" id="botao-falar">🎤 Falar</button>
     <button type="button" id="botao-parar" style="display:none;">🛑 Parar</button>
     <button type="button" id="botao-salvar">💾 Baixar Texto</button>
-    <button type="button" onclick="window.location.href='{{ url_for('index') }}'">🔄 Limpar</button>
+    <form style="display: inline;" action="{{ url_for('index') }}" method="get">
+        <button type="submit">🔄 Limpar</button>
+    </form>
 
     <div class="progress-bar" id="barra">
         <div class="progress-bar-fill"></div>
