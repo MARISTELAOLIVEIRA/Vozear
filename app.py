@@ -66,21 +66,33 @@ def descrever_imagem_azure(image_bytes):
         return "Configuração do Azure Computer Vision não encontrada."
 
     try:
+        # Garantir que o endpoint tenha a barra final
+        if not endpoint.endswith('/'):
+            endpoint += '/'
+            
         client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
-        analysis = client.describe_image_in_stream(io.BytesIO(image_bytes), language="pt")
-        if analysis.captions:
-            return analysis.captions[0].text
+        
+        # Usar a análise mais robusta
+        analysis = client.analyze_image_in_stream(
+            io.BytesIO(image_bytes), 
+            visual_features=['Description'],
+            language='pt'
+        )
+        
+        if analysis.description and analysis.description.captions:
+            return analysis.description.captions[0].text
         else:
-            return "Imagem processada, mas nenhuma descrição foi gerada automaticamente."
+            return "Imagem processada com sucesso. Descrição automática não disponível para esta imagem."
+            
     except Exception as e:
         error_msg = str(e).lower()
-        if "not found" in error_msg:
-            return "Imagem carregada com sucesso. O serviço de descrição do Azure Computer Vision não está disponível no momento."
-        elif "unauthorized" in error_msg or "forbidden" in error_msg:
-            return "Imagem carregada com sucesso. Credenciais do Azure Computer Vision precisam ser atualizadas."
+        if "not found" in error_msg or "404" in error_msg:
+            return "Imagem carregada com sucesso. O serviço Azure Computer Vision está temporariamente indisponível."
+        elif "unauthorized" in error_msg or "forbidden" in error_msg or "401" in error_msg or "403" in error_msg:
+            return "Imagem carregada com sucesso. Credenciais do Azure Computer Vision precisam ser renovadas."
         else:
-            print(f"Erro ao descrever imagem: {e}")
-            return "Imagem carregada com sucesso. O serviço de descrição automática está temporariamente indisponível."
+            print(f"Erro Azure CV: {e}")
+            return "Imagem carregada com sucesso. Processamento automático de descrição temporariamente indisponível."
 
 @app.route("/sobre")
 def sobre():
