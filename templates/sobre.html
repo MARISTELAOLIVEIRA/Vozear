@@ -78,6 +78,13 @@
             darkModeToggle.addEventListener('click', toggleDarkMode);
         }
 
+        const voltarBtn = document.getElementById('voltar-btn');
+        if (voltarBtn) {
+            voltarBtn.addEventListener('click', function() {
+                window.location.href = '/';
+            });
+        }
+
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
             localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
@@ -86,9 +93,7 @@
 </script>
 
 <div class="header-controls">
-    <form style="display: inline;" action="{{ url_for('index') }}" method="get">
-        <button type="submit" style="font-size: 8px;">Voltar</button>
-    </form>
+    <button id="voltar-btn" style="font-size: 8px;">Voltar</button>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
 </div>
 
