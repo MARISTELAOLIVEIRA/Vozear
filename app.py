@@ -63,7 +63,7 @@ def descrever_imagem_azure(image_bytes):
     key = os.getenv("AZURE_CV_KEY")
     
     if not endpoint or not key:
-        return "Serviço de descrição de imagem não configurado."
+        return "Configuração do Azure Computer Vision não encontrada."
 
     try:
         client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
@@ -71,11 +71,16 @@ def descrever_imagem_azure(image_bytes):
         if analysis.captions:
             return analysis.captions[0].text
         else:
-            return "Imagem carregada com sucesso. Descrição automática temporariamente indisponível."
+            return "Imagem processada, mas nenhuma descrição foi gerada automaticamente."
     except Exception as e:
-        print(f"Erro ao descrever imagem: {e}")
-        # Fallback quando Azure não está disponível
-        return "Imagem carregada com sucesso. O serviço de descrição automática está temporariamente indisponível, mas você pode digitar uma descrição manual da imagem."
+        error_msg = str(e).lower()
+        if "not found" in error_msg:
+            return "Imagem carregada com sucesso. O serviço de descrição do Azure Computer Vision não está disponível no momento."
+        elif "unauthorized" in error_msg or "forbidden" in error_msg:
+            return "Imagem carregada com sucesso. Credenciais do Azure Computer Vision precisam ser atualizadas."
+        else:
+            print(f"Erro ao descrever imagem: {e}")
+            return "Imagem carregada com sucesso. O serviço de descrição automática está temporariamente indisponível."
 
 @app.route("/sobre")
 def sobre():
