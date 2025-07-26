@@ -86,7 +86,9 @@
 </script>
 
 <div class="header-controls">
-    <button onclick="window.location.href='{{ url_for(\'index\') }}'" style="font-size: 8px;">Voltar</button>
+    <form style="display: inline;" action="{{ url_for('index') }}" method="get">
+        <button type="submit" style="font-size: 8px;">Voltar</button>
+    </form>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
 </div>
 
