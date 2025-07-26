@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, send_from_directory
-import os
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for, flash, jsonify, session
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
+from functools import wraps
+import os
 import asyncio
 import edge_tts
 import fitz
@@ -18,6 +20,42 @@ AUDIO_FOLDER = "audio"
 ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff'}
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a59277976e9c00c59914b53f5abef33cfa67669a3661d'
+
+# Configuração do banco de dados SQLite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vozear_comentarios.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Inicializar SQLAlchemy
+db = SQLAlchemy(app)
+
+# Modelo de Comentário
+class Comentario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=True)
+    comentario = db.Column(db.Text, nullable=False)
+    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    aprovado = db.Column(db.Boolean, default=False)
+    
+    def __repr__(self):
+        return f'<Comentario {self.nome}: {self.comentario[:50]}...>'
+
+# Criar tabelas
+with app.app_context():
+    db.create_all()
+
+# Configurações de admin
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "vozear2025"  # Mude para uma senha mais segura em produção
+
+# Decorador para proteger rotas admin
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return redirect(url_for('admin_login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 os.makedirs(AUDIO_FOLDER, exist_ok=True)
 
@@ -94,9 +132,105 @@ def descrever_imagem_azure(image_bytes):
             print(f"Erro Azure CV: {e}")
             return "Imagem carregada com sucesso. Processamento automático de descrição temporariamente indisponível."
 
-@app.route("/sobre")
+@app.route("/sobre", methods=["GET", "POST"])
 def sobre():
-    return render_template("sobre.html")
+    if request.method == "POST":
+        nome = request.form.get("nome")
+        email = request.form.get("email", "")
+        comentario_texto = request.form.get("comentario")
+        
+        if nome and comentario_texto:
+            novo_comentario = Comentario(
+                nome=nome,
+                email=email,
+                comentario=comentario_texto
+            )
+            db.session.add(novo_comentario)
+            db.session.commit()
+            flash("Comentário enviado com sucesso! Aguardando moderação.", "success")
+            return redirect(url_for('sobre'))
+        else:
+            flash("Por favor, preencha pelo menos o nome e o comentário.", "error")
+    
+    # Buscar comentários aprovados
+    comentarios_aprovados = Comentario.query.filter_by(aprovado=True).order_by(Comentario.data_criacao.desc()).all()
+    
+    return render_template("sobre.html", comentarios=comentarios_aprovados)
+
+# Rota de login admin
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['logged_in'] = True
+            session['admin_user'] = username
+            flash("Login realizado com sucesso!", "success")
+            return redirect(url_for('admin_comentarios'))
+        else:
+            flash("Usuário ou senha incorretos!", "error")
+    
+    return render_template("admin_login.html")
+
+# Rota de logout admin
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop('logged_in', None)
+    session.pop('admin_user', None)
+    flash("Logout realizado com sucesso!", "success")
+    return redirect(url_for('admin_login'))
+
+# Rota para moderar comentários (agora protegida)
+@app.route("/admin/comentarios")
+@login_required
+def admin_comentarios():
+    comentarios_pendentes = Comentario.query.filter_by(aprovado=False).order_by(Comentario.data_criacao.desc()).all()
+    return render_template("admin_comentarios.html", comentarios=comentarios_pendentes)
+
+# Rota para visualizar todo o banco de dados (agora protegida)
+@app.route("/admin/banco")
+@login_required
+def admin_banco():
+    todos_comentarios = Comentario.query.order_by(Comentario.data_criacao.desc()).all()
+    total_comentarios = len(todos_comentarios)
+    aprovados = len([c for c in todos_comentarios if c.aprovado])
+    pendentes = len([c for c in todos_comentarios if not c.aprovado])
+    
+    return render_template("admin_banco.html", 
+                         comentarios=todos_comentarios,
+                         total=total_comentarios,
+                         aprovados=aprovados,
+                         pendentes=pendentes)
+
+@app.route("/admin/aprovar/<int:comentario_id>")
+@login_required
+def aprovar_comentario(comentario_id):
+    comentario = Comentario.query.get_or_404(comentario_id)
+    comentario.aprovado = True
+    db.session.commit()
+    flash(f"Comentário de {comentario.nome} aprovado!", "success")
+    return redirect(url_for('admin_comentarios'))
+
+@app.route("/admin/rejeitar/<int:comentario_id>")
+@login_required
+def rejeitar_comentario(comentario_id):
+    comentario = Comentario.query.get_or_404(comentario_id)
+    db.session.delete(comentario)
+    db.session.commit()
+    flash(f"Comentário de {comentario.nome} rejeitado!", "warning")
+    return redirect(url_for('admin_comentarios'))
+
+@app.route("/admin/excluir/<int:comentario_id>")
+@login_required
+def excluir_comentario(comentario_id):
+    comentario = Comentario.query.get_or_404(comentario_id)
+    nome_usuario = comentario.nome
+    db.session.delete(comentario)
+    db.session.commit()
+    flash(f"Comentário de {nome_usuario} excluído permanentemente!", "error")
+    return redirect(request.referrer or url_for('admin_banco'))
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -193,4 +327,4 @@ def som_sucesso():
     return send_from_directory('static', 'sucesso.mp3')
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    app.run(debug=True, host="0.0.0.0", port=5002)
