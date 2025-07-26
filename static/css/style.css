@@ -267,7 +267,7 @@ background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat
 }
 
 .yo{
-	border: 12px solid #2ecc71;
+	border: 8px solid #2ecc71;
 	border-bottom-right-radius: 50%;
 	border-top-left-radius: 50%;
 }
@@ -685,147 +685,47 @@ footer {
     padding: 10px;
     text-align: center;
     font-size: 0.8em;
-    border-top: 1px solid #ccc;
+	font: 1em/ 1.25 ubuntu, trebuchet ms, arial, sans-serif;    border-top: 1px solid #ccc;
     width: 100%;
     box-sizing: border-box; /* Garante que padding não aumente a largura */
     margin-top: 30px; /* Adiciona um espaço acima do rodapé */
 }
-<<<<<<< HEAD
-.progress-bar {
-            display: none;
-            margin-top: 1rem;
-            height: 8px;
-            background-color: #ccc;
-        }
-
-        .progress-bar-fill {
-            width: 100%;
-            height: 100%;
-            background-color: #4caf50;
-            animation: load 2s infinite;
-        }
-
-        @keyframes load {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        .success-message {
-            color: green;
-            font-weight: bold;
-            margin-top: 1rem;
-        }
-
-/* Regras responsivas para mobile */
-@media (max-width: 768px) {
-    body {
-        margin: 10px auto;
-        padding: 15px;
-        max-width: 95%;
-    }
-    
-    .header-controls {
-        margin-bottom: 15px;
-    }
-    
-    .header-controls button {
-        padding: 8px 15px;
-        font-size: 13px;
-        margin: 2px;
-    }
-    
-    .logo-container {
-        gap: 15px;
-        margin-bottom: 15px;
-    }
-    
-    .logo-container img {
-        max-width: 120px;
-    }
-    
-    h1 {
-        font-size: 1.5em;
-        margin-bottom: 15px;
-    }
-    
-    textarea {
-        height: 120px;
-        font-size: 1em;
-        padding: 8px;
-    }
-    
-    button {
-        padding: 10px 20px;
-        font-size: 1em;
-        margin-top: 10px;
-    }
-    
-    select, input[type="file"] {
-        font-size: 14px;
-        padding: 8px;
-        margin: 5px 0;
-    }
-    
-    footer {
-        font-size: 0.7em;
-        padding: 8px;
-        margin-top: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    body {
-        margin: 5px auto;
-        padding: 10px;
-    }
-    
-    .header-controls button {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-    
-    .logo-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .logo-container img {
-        max-width: 100px;
-    }
-    
-    h1 {
-        font-size: 1.3em;
-    }
-    
-    textarea {
-        height: 100px;
-        font-size: 0.9em;
-    }
-    
-    button {
-        padding: 8px 16px;
-        font-size: 0.9em;
-    }
-    
-    p {
-        font-size: 0.9em;
-    }
-}
-
-/* Remove position absolute do dark-mode-toggle */
-.dark-mode-toggle {
-    position: static;
-    padding: 8px 15px;
-    font-size: 14px;
-}
-
-@media (max-width: 768px) {
-    .dark-mode-toggle {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-}
-
 .fontemediun {
 	font-size: 18px;	
+}
+#chatbox-container {
+  display: none;
+  position: fixed;
+  bottom: 60px; /* sobe um pouco acima do botão */
+  right: 20px;
+  width: 300px;
+  background-color: #1a2d1a;
+  border: 2px solid #33cc66;
+  border-radius: 10px;
+  padding: 10px;
+  color: #cceccc;
+  z-index: 9999;
+  box-shadow: 0 0 15px #33cc66;
+  flex-direction: column;
+}
+
+#botao-assistente {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background-color: #33cc66;
+  color: #0f1f0f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 0 8px #33cc66;
+}
+.sobre {
+  font-size: 1.2em;
+  text-align: center;
+  line-height: 1.6;
+  margin-top: 20px;
 }
