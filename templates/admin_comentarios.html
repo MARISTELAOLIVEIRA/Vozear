@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Moderação de Comentários - Vozear</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    
+    <style>
+        .admin-header {
+            background: linear-gradient(45deg, #045304ff, #0d7c0d);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .comentario-pendente {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #ffa500;
+        }
+        
+        .comentario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .comentario-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .comentario-texto {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        
+        .acoes-comentario {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-aprovar {
+            background: linear-gradient(45deg, #28a745, #34ce57);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .btn-rejeitar {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .btn-excluir {
+            background: linear-gradient(45deg, #6f1313, #8b0000);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .btn-excluir:hover {
+            background: linear-gradient(45deg, #8b0000, #a01010);
+            transform: scale(1.05);
+        }
+        
+        .btn-voltar {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .sem-comentarios {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .comentario-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .comentario-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .acoes-comentario {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<script>
+    // Carregar modo escuro salvo
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedDarkMode = localStorage.getItem("dark-mode");
+        if (savedDarkMode === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    });
+</script>
+
+<a href="{{ url_for('sobre') }}" class="btn-voltar">← Voltar para Sobre</a>
+<a href="{{ url_for('admin_banco') }}" class="btn-voltar" style="background: linear-gradient(45deg, #045304ff, #0d7c0d);">🗄️ Ver Banco Completo</a>
+<a href="{{ url_for('admin_logout') }}" class="btn-voltar" style="background: linear-gradient(45deg, #dc3545, #c82333);">🚪 Logout</a>
+
+<div class="admin-header">
+    <h1>🛡️ Moderação de Comentários</h1>
+    <p>Aqui você pode aprovar ou rejeitar comentários pendentes</p>
+</div>
+
+<!-- Mensagens Flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message" style="
+                padding: 15px; 
+                margin: 15px 0; 
+                border-radius: 5px; 
+                {% if category == 'success' %}
+                    background-color: #d4edda; 
+                    color: #155724; 
+                    border: 1px solid #c3e6cb;
+                {% elif category == 'error' %}
+                    background-color: #f8d7da; 
+                    color: #721c24; 
+                    border: 1px solid #f5c6cb;
+                {% elif category == 'warning' %}
+                    background-color: #fff3cd; 
+                    color: #856404; 
+                    border: 1px solid #ffeaa7;
+                {% endif %}
+            ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Lista de Comentários Pendentes -->
+{% if comentarios %}
+    <h2 style="margin-bottom: 20px;">📋 Comentários Aguardando Moderação ({{ comentarios|length }})</h2>
+    
+    {% for comentario in comentarios %}
+        <div class="comentario-pendente">
+            <div class="comentario-header">
+                <div>
+                    <strong style="color: #045304ff; font-size: 18px;">{{ comentario.nome }}</strong>
+                    {% if comentario.email %}
+                        <br><small style="opacity: 0.7;">📧 {{ comentario.email }}</small>
+                    {% endif %}
+                </div>
+                <div class="comentario-meta">
+                    <span>🕒 {{ comentario.data_criacao.strftime('%d/%m/%Y') }}</span>
+                    <span>⏰ {{ comentario.data_criacao.strftime('%H:%M') }}</span>
+                </div>
+            </div>
+            
+            <div class="comentario-texto">
+                "{{ comentario.comentario }}"
+            </div>
+            
+            <div class="acoes-comentario">
+                <a href="{{ url_for('aprovar_comentario', comentario_id=comentario.id) }}" 
+                   class="btn-aprovar"
+                   onclick="return confirm('Tem certeza que deseja aprovar este comentário?')">
+                    ✅ Aprovar
+                </a>
+                <a href="{{ url_for('rejeitar_comentario', comentario_id=comentario.id) }}" 
+                   class="btn-rejeitar"
+                   onclick="return confirm('Tem certeza que deseja rejeitar este comentário? Esta ação não pode ser desfeita.')">
+                    ❌ Rejeitar
+                </a>
+                <a href="{{ url_for('excluir_comentario', comentario_id=comentario.id) }}" 
+                   class="btn-excluir"
+                   onclick="return confirm('⚠️ ATENÇÃO! Tem certeza que deseja EXCLUIR PERMANENTEMENTE este comentário? Esta ação não pode ser desfeita!')">
+                    🗑️ Excluir
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="sem-comentarios">
+        <h2>🎉 Parabéns!</h2>
+        <p>Não há comentários pendentes para moderação.</p>
+        <p style="margin-top: 20px;">
+            <a href="{{ url_for('sobre') }}" class="btn-voltar" style="margin: 0;">
+                ← Voltar para a página Sobre
+            </a>
+        </p>
+    </div>
+{% endif %}
+
+<footer style="margin-top: 50px; text-align: center; opacity: 0.7;">
+    <p>&copy; Maristela 🐍 🌶️ 2025 | Sistema de Moderação Vozear</p>
+</footer>
+
+</body>
+</html>

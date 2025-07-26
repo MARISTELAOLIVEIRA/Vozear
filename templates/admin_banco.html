@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banco de Dados - Vozear Admin</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    
+    <style>
+        .admin-header {
+            background: linear-gradient(45deg, #045304ff, #0d7c0d);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .estatisticas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-stat h3 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+            color: #045304ff;
+        }
+        
+        .card-stat p {
+            margin: 0;
+            opacity: 0.8;
+        }
+        
+        .navegacao-admin {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-nav {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .btn-nav.ativo {
+            background: linear-gradient(45deg, #045304ff, #0d7c0d);
+        }
+        
+        .comentario-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .comentario-aprovado {
+            border-left: 4px solid #28a745;
+        }
+        
+        .comentario-pendente {
+            border-left: 4px solid #ffa500;
+        }
+        
+        .comentario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-aprovado {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-pendente {
+            background: #ffa500;
+            color: white;
+        }
+        
+        .comentario-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .comentario-texto {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            border-radius: 5px;
+            line-height: 1.6;
+        }
+        
+        .acoes-rapidas {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-aprovar-mini {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .btn-rejeitar-mini {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .btn-excluir-mini {
+            background: #6f1313;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+        
+        .btn-excluir-mini:hover {
+            background: #8b0000;
+        }
+        
+        .sem-comentarios {
+            text-align: center;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .navegacao-admin {
+                flex-direction: column;
+            }
+            
+            .comentario-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .comentario-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .acoes-rapidas {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<script>
+    // Carregar modo escuro salvo
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedDarkMode = localStorage.getItem("dark-mode");
+        if (savedDarkMode === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    });
+</script>
+
+<div class="admin-header">
+    <h1>🗄️ Banco de Dados Completo</h1>
+    <p>Visualização completa de todos os comentários do sistema</p>
+</div>
+
+<!-- Navegação Admin -->
+<div class="navegacao-admin">
+    <a href="{{ url_for('sobre') }}" class="btn-nav">← Voltar para Sobre</a>
+    <a href="{{ url_for('admin_comentarios') }}" class="btn-nav">📋 Moderar Pendentes</a>
+    <a href="{{ url_for('admin_banco') }}" class="btn-nav ativo">🗄️ Ver Banco Completo</a>
+    <a href="{{ url_for('admin_logout') }}" class="btn-nav" style="background: linear-gradient(45deg, #dc3545, #c82333);">🚪 Logout</a>
+</div>
+
+<!-- Estatísticas -->
+<div class="estatisticas">
+    <div class="card-stat">
+        <h3>{{ total }}</h3>
+        <p>Total de Comentários</p>
+    </div>
+    <div class="card-stat">
+        <h3 style="color: #28a745;">{{ aprovados }}</h3>
+        <p>Comentários Aprovados</p>
+    </div>
+    <div class="card-stat">
+        <h3 style="color: #ffa500;">{{ pendentes }}</h3>
+        <p>Aguardando Moderação</p>
+    </div>
+    <div class="card-stat">
+        <h3 style="color: #6c757d;">{{ "%.1f"|format((aprovados / total * 100) if total > 0 else 0) }}%</h3>
+        <p>Taxa de Aprovação</p>
+    </div>
+</div>
+
+<!-- Mensagens Flash -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message" style="
+                padding: 15px; 
+                margin: 15px 0; 
+                border-radius: 5px; 
+                {% if category == 'success' %}
+                    background-color: #d4edda; 
+                    color: #155724; 
+                    border: 1px solid #c3e6cb;
+                {% elif category == 'error' %}
+                    background-color: #f8d7da; 
+                    color: #721c24; 
+                    border: 1px solid #f5c6cb;
+                {% elif category == 'warning' %}
+                    background-color: #fff3cd; 
+                    color: #856404; 
+                    border: 1px solid #ffeaa7;
+                {% endif %}
+            ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Lista de Todos os Comentários -->
+{% if comentarios %}
+    <h2 style="margin-bottom: 20px;">📊 Todos os Comentários ({{ comentarios|length }})</h2>
+    
+    {% for comentario in comentarios %}
+        <div class="comentario-item {% if comentario.aprovado %}comentario-aprovado{% else %}comentario-pendente{% endif %}">
+            <div class="comentario-header">
+                <div>
+                    <strong style="color: #045304ff; font-size: 18px;">{{ comentario.nome }}</strong>
+                    <span class="status-badge {% if comentario.aprovado %}status-aprovado{% else %}status-pendente{% endif %}">
+                        {% if comentario.aprovado %}✅ APROVADO{% else %}⏳ PENDENTE{% endif %}
+                    </span>
+                </div>
+                <div class="comentario-meta">
+                    <span>🕒 {{ comentario.data_criacao.strftime('%d/%m/%Y') }}</span>
+                    <span>⏰ {{ comentario.data_criacao.strftime('%H:%M') }}</span>
+                    {% if comentario.email %}
+                        <span>📧 {{ comentario.email }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="comentario-texto">
+                "{{ comentario.comentario }}"
+            </div>
+            
+            <div class="acoes-rapidas">
+                {% if not comentario.aprovado %}
+                    <a href="{{ url_for('aprovar_comentario', comentario_id=comentario.id) }}" 
+                       class="btn-aprovar-mini"
+                       onclick="return confirm('Aprovar este comentário?')">
+                        ✅ Aprovar
+                    </a>
+                    <a href="{{ url_for('rejeitar_comentario', comentario_id=comentario.id) }}" 
+                       class="btn-rejeitar-mini"
+                       onclick="return confirm('Rejeitar este comentário?')">
+                        ❌ Rejeitar
+                    </a>
+                {% endif %}
+                <a href="{{ url_for('excluir_comentario', comentario_id=comentario.id) }}" 
+                   class="btn-excluir-mini"
+                   onclick="return confirm('⚠️ ATENÇÃO! Tem certeza que deseja EXCLUIR PERMANENTEMENTE este comentário? Esta ação não pode ser desfeita!')">
+                    🗑️ Excluir
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="sem-comentarios">
+        <h2>📭 Nenhum comentário encontrado</h2>
+        <p>O banco de dados está vazio.</p>
+    </div>
+{% endif %}
+
+<footer style="margin-top: 50px; text-align: center; opacity: 0.7;">
+    <p>&copy; Maristela 🐍 🌶️ 2025 | Sistema de Banco de Dados Vozear</p>
+</footer>
+
+</body>
+</html>

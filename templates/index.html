@@ -112,13 +112,14 @@
 <div class="header-controls">
     <button id="sobre-btn" style="font-size: 10px;">Sobre</button>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+    <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa">⚙️</a>
 </div>
 
 <div class="logo-container">
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo">
 </div>
 
-<h1>Conversor de 📄 Texto para Áudio 🔊</h1>
+<h1>🎧 Transforme Palavras em Experiências Sonoras ✨</h1>
 <p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
 
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
@@ -171,6 +172,7 @@
 </script>
 <script src="{{ url_for('static', filename='js/vozear_microfone.js') }}"></script>
 <script src="{{ url_for('static', filename='js/salvar_como_txt.js') }}"></script>
+<script src="{{ url_for('static', filename='js/gerar_documento.js') }}"></script>
 
 </body>
 </html>

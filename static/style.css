@@ -1,7 +1,7 @@
 /* CSS limpo para o projeto Vozear com Azure Computer Vision */
 html {
     height: 100%;
-    background: linear-gradient(to right, #f0f0f0, #c0baba);
+    background: linear-gradient(135deg, #0a1419 0%, #1a2f3a 25%, #243847 50%, #1a2f3a 75%, #0a1419 100%);
     background-attachment: fixed;
 }
 
@@ -32,7 +32,7 @@ body {
 
 /* Efeito de prêmio/selo no canto superior direito */
 body::before {
-    content: "🏆";
+    content: "☀️";
     position: absolute;
     top: -5px;
     right: -5px;
@@ -183,6 +183,28 @@ a {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+/* Botão de acesso admin */
+.admin-access-btn {
+    position: static;
+    padding: 8px 15px;
+    font-size: 14px;
+    background-color: #444;
+    color: #FFD700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    opacity: 0.7;
+}
+
+.admin-access-btn:hover {
+    background-color: #555;
+    opacity: 1;
+    transform: scale(1.05);
 }
 
 /* Header controls for navigation */

@@ -98,6 +98,7 @@
 <div class="header-controls">
     <button id="voltar-btn" style="font-size: 10px;">Voltar</button>
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+    <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa">⚙️</a>
 </div>
 
 <div class="logo-container">
@@ -138,8 +139,145 @@
         ✔️ Fazer o download dos arquivos gerados, disponível por 10 minutos após a conversão,
         após esse período, os arquivos são removidos do servidor automaticamente para economizar espaço.
     </p>
-    <p>O projeto é open-source e está disponível no GitHub. Você pode contribuir com melhorias, reportar bugs ou sugerir novas funcionalidades. <a href="https://github.com/MARISTELAOLIVEIRA/Vozear.git">Repositório</a></p>
-    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato <a href="https://github.com/MARISTELAOLIVEIRA">Maristela</a></p>
+    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato</p>
+</div> 
+
+<!-- Seção de Comentários -->
+<div class="comentarios-section" style="margin-top: 40px;">
+    <h2 style="color: #045304ff; margin-bottom: 20px;">💬 Comentários dos Usuários</h2>
+    
+    <!-- Mensagens Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}" style="
+                    padding: 10px 15px; 
+                    margin: 10px 0; 
+                    border-radius: 5px; 
+                    {% if category == 'success' %}
+                        background-color: #d4edda; 
+                        color: #155724; 
+                        border: 1px solid #c3e6cb;
+                    {% elif category == 'error' %}
+                        background-color: #f8d7da; 
+                        color: #721c24; 
+                        border: 1px solid #f5c6cb;
+                    {% elif category == 'warning' %}
+                        background-color: #fff3cd; 
+                        color: #856404; 
+                        border: 1px solid #ffeaa7;
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Formulário para Novo Comentário -->
+    <div class="novo-comentario" style="
+        background: rgba(255, 255, 255, 0.1); 
+        padding: 20px; 
+        border-radius: 10px; 
+        margin-bottom: 30px;
+        backdrop-filter: blur(10px);
+    ">
+        <h3 style="margin-bottom: 15px;">✍️ Deixe seu comentário</h3>
+        <form method="POST" action="{{ url_for('sobre') }}">
+            <div style="margin-bottom: 15px;">
+                <label for="nome" style="display: block; margin-bottom: 5px; font-weight: bold;">Nome *</label>
+                <input type="text" id="nome" name="nome" required style="
+                    width: 100%; 
+                    padding: 10px; 
+                    border: 2px solid #045304ff; 
+                    border-radius: 5px; 
+                    font-size: 16px;
+                    box-sizing: border-box;
+                ">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="email" style="display: block; margin-bottom: 5px; font-weight: bold;">Email (opcional)</label>
+                <input type="email" id="email" name="email" style="
+                    width: 100%; 
+                    padding: 10px; 
+                    border: 2px solid #045304ff; 
+                    border-radius: 5px; 
+                    font-size: 16px;
+                    box-sizing: border-box;
+                ">
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="comentario" style="display: block; margin-bottom: 5px; font-weight: bold;">Comentário *</label>
+                <textarea id="comentario" name="comentario" required rows="4" style="
+                    width: 100%; 
+                    padding: 10px; 
+                    border: 2px solid #045304ff; 
+                    border-radius: 5px; 
+                    font-size: 16px; 
+                    resize: vertical;
+                    box-sizing: border-box;
+                "></textarea>
+            </div>
+            
+            <button type="submit" style="
+                background: linear-gradient(45deg, #045304ff, #0d7c0d); 
+                color: white; 
+                padding: 12px 25px; 
+                border: none; 
+                border-radius: 5px; 
+                font-size: 16px; 
+                cursor: pointer; 
+                font-weight: bold;
+            ">
+                📝 Enviar Comentário
+            </button>
+        </form>
+        <p style="font-size: 12px; margin-top: 10px; opacity: 0.8;">
+            * Todos os comentários passam por moderação antes de serem publicados.
+        </p>
+    </div>
+    
+    <!-- Lista de Comentários Aprovados -->
+    <div class="comentarios-lista">
+        <h3 style="margin-bottom: 20px;">📖 Comentários da Comunidade</h3>
+        
+        {% if comentarios %}
+            {% for comentario in comentarios %}
+                <div class="comentario-item" style="
+                    background: rgba(255, 255, 255, 0.05); 
+                    padding: 15px; 
+                    border-radius: 8px; 
+                    margin-bottom: 15px; 
+                    border-left: 4px solid #045304ff;
+                ">
+                    <div class="comentario-header" style="
+                        display: flex; 
+                        justify-content: space-between; 
+                        align-items: center; 
+                        margin-bottom: 10px;
+                    ">
+                        <strong style="color: #045304ff;">{{ comentario.nome }}</strong>
+                        <small style="opacity: 0.7;">{{ comentario.data_criacao.strftime('%d/%m/%Y às %H:%M') }}</small>
+                    </div>
+                    <div class="comentario-texto" style="line-height: 1.6;">
+                        {{ comentario.comentario }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="
+                text-align: center; 
+                padding: 30px; 
+                background: rgba(255, 255, 255, 0.05); 
+                border-radius: 8px; 
+                opacity: 0.7;
+            ">
+                <p>🤔 Ainda não há comentários. Seja o primeiro a compartilhar sua experiência!</p>
+            </div>
+        {% endif %}
+    </div>
 </div> 
 
 <footer>

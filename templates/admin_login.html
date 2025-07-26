@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - Vozear</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+    
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            color: #045304ff;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        
+        .login-header p {
+            color: #666;
+            margin: 0;
+        }
+        
+        .logo-login {
+            max-width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #045304ff;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #045304ff;
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #0d7c0d;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 10px rgba(4, 83, 4, 0.3);
+        }
+        
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(45deg, #045304ff, #0d7c0d);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(4, 83, 4, 0.4);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .btn-voltar {
+            width: 100%;
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-voltar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(108, 117, 125, 0.3);
+        }
+        
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .flash-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .login-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .security-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        
+        /* Dark mode adjustments */
+        body.dark-mode .form-group input {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: #045304ff;
+        }
+        
+        body.dark-mode .form-group input:focus {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark-mode .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .login-header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<script>
+    // Carregar modo escuro salvo
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedDarkMode = localStorage.getItem("dark-mode");
+        if (savedDarkMode === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    });
+</script>
+
+<div class="login-container">
+    <div class="login-header">
+        <div class="security-icon">🔐</div>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo" class="logo-login">
+        <h1>Admin Login</h1>
+        <p>Área Administrativa Restrita</p>
+    </div>
+    
+    <!-- Mensagens Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST" action="{{ url_for('admin_login') }}">
+        <div class="form-group">
+            <label for="username">👤 Usuário</label>
+            <input type="text" id="username" name="username" required 
+                   placeholder="Digite seu usuário" autocomplete="username">
+        </div>
+        
+        <div class="form-group">
+            <label for="password">🔑 Senha</label>
+            <input type="password" id="password" name="password" required 
+                   placeholder="Digite sua senha" autocomplete="current-password">
+        </div>
+        
+        <button type="submit" class="btn-login">
+            🚀 Entrar no Admin
+        </button>
+    </form>
+    
+    <a href="{{ url_for('sobre') }}" class="btn-voltar">
+        ← Voltar para o Site
+    </a>
+    
+    <div class="login-info">
+        <p>🛡️ Área protegida do sistema Vozear</p>
+        <p>Apenas administradores autorizados</p>
+    </div>
+</div>
+
+</body>
+</html>
