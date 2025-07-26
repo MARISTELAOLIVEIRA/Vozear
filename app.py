@@ -61,18 +61,21 @@ def extrair_imagens_pdf(caminho_pdf):
 def descrever_imagem_azure(image_bytes):
     endpoint = os.getenv("AZURE_CV_ENDPOINT")
     key = os.getenv("AZURE_CV_KEY")
-
-    client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
+    
+    if not endpoint or not key:
+        return "Serviço de descrição de imagem não configurado."
 
     try:
+        client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
         analysis = client.describe_image_in_stream(io.BytesIO(image_bytes), language="pt")
         if analysis.captions:
             return analysis.captions[0].text
         else:
-            return "Imagem encontrada, mas sem descrição."
+            return "Imagem carregada com sucesso. Descrição automática temporariamente indisponível."
     except Exception as e:
         print(f"Erro ao descrever imagem: {e}")
-        return "Erro ao processar imagem."
+        # Fallback quando Azure não está disponível
+        return "Imagem carregada com sucesso. O serviço de descrição automática está temporariamente indisponível, mas você pode digitar uma descrição manual da imagem."
 
 @app.route("/sobre")
 def sobre():
@@ -82,60 +85,85 @@ def sobre():
 def index():
     audio_file = None
     if request.method == "POST":
-        texto = request.form.get("texto")
-        arquivo = request.files.get("arquivo")
-        texto_final = ""
-        url = request.form.get("url")
-        if url:
-            try:
-                import requests
-                from bs4 import BeautifulSoup
-
-                response = requests.get(url, timeout=10)
-                soup = BeautifulSoup(response.content, "html.parser")
-
-                # Tenta extrair o conteúdo principal
-                artigos = soup.find_all(["article", "p", "h1", "h2"])
-                texto_extraido = "\n".join([tag.get_text() for tag in artigos if tag.get_text().strip()])
-                texto_final = texto_extraido if texto_extraido else "Não foi possível extrair conteúdo legível do site."
-            except Exception as e:
-                texto_final = f"Ocorreu um erro ao acessar a URL: {str(e)}"
-
-        if texto and texto.strip():
-            texto_final = texto
-        elif arquivo:
-            extensao = os.path.splitext(arquivo.filename)[1].lower()
-            caminho_arquivo = os.path.join(AUDIO_FOLDER, arquivo.filename)
-            arquivo.save(caminho_arquivo)
-
-            if extensao == '.pdf':
-                texto_extraido = extrair_texto_pdf(caminho_arquivo)
-                texto_final += texto_extraido
-                imagens = extrair_imagens_pdf(caminho_arquivo)
-                for idx, img_bytes in enumerate(imagens, start=1):
-                    descricao = descrever_imagem_azure(img_bytes)
-                    texto_final += f"\nDescrição da imagem {idx}: {descricao}\n"
-            elif extensao in ALLOWED_IMAGE_EXTENSIONS:
-                with open(caminho_arquivo, "rb") as img_file:
-                    image_bytes = img_file.read()
-                    descricao = descrever_imagem_azure(image_bytes)
-                    texto_final = f"Descrição da imagem: {descricao}"
-            else:
-                texto_final = "Formato de arquivo não suportado."
-
-        if texto_final:
-            nome_arquivo = f"audio_{datetime.now().strftime('%Y%m%d%H%M%S')}.mp3"
-            caminho = os.path.join(AUDIO_FOLDER, nome_arquivo)
-            voice = request.form.get("voz", "pt-BR-AntonioNeural")
-            rate = request.form.get("velocidade", "+0%")
-            async def gerar_audio():
+        try:
+            texto = request.form.get("texto")
+            arquivo = request.files.get("arquivo")
+            texto_final = ""
+            url = request.form.get("url")
+            
+            if url:
                 try:
-                    communicate = edge_tts.Communicate(texto_final, voice, rate=rate)
-                    await communicate.save(caminho)
+                    import requests
+                    from bs4 import BeautifulSoup
+
+                    response = requests.get(url, timeout=10)
+                    soup = BeautifulSoup(response.content, "html.parser")
+
+                    # Tenta extrair o conteúdo principal
+                    artigos = soup.find_all(["article", "p", "h1", "h2"])
+                    texto_extraido = "\n".join([tag.get_text() for tag in artigos if tag.get_text().strip()])
+                    texto_final = texto_extraido if texto_extraido else "Não foi possível extrair conteúdo legível do site."
                 except Exception as e:
-                    print(f"Erro ao gerar áudio: {e}")
-            asyncio.run(gerar_audio())
-            audio_file = nome_arquivo
+                    print(f"Erro ao processar URL: {e}")
+                    texto_final = f"Ocorreu um erro ao acessar a URL: {str(e)}"
+
+            if texto and texto.strip():
+                texto_final = texto
+            elif arquivo:
+                extensao = os.path.splitext(arquivo.filename)[1].lower()
+                caminho_arquivo = os.path.join(AUDIO_FOLDER, arquivo.filename)
+                arquivo.save(caminho_arquivo)
+
+                if extensao == '.pdf':
+                    try:
+                        texto_extraido = extrair_texto_pdf(caminho_arquivo)
+                        texto_final += texto_extraido
+                        imagens = extrair_imagens_pdf(caminho_arquivo)
+                        for idx, img_bytes in enumerate(imagens, start=1):
+                            try:
+                                descricao = descrever_imagem_azure(img_bytes)
+                                texto_final += f"\nDescrição da imagem {idx}: {descricao}\n"
+                            except Exception as e:
+                                print(f"Erro ao processar imagem {idx} do PDF: {e}")
+                                texto_final += f"\nImagem {idx} encontrada no PDF (descrição indisponível)\n"
+                    except Exception as e:
+                        print(f"Erro ao processar PDF: {e}")
+                        texto_final = f"Erro ao processar arquivo PDF: {str(e)}"
+                elif extensao in ALLOWED_IMAGE_EXTENSIONS:
+                    try:
+                        with open(caminho_arquivo, "rb") as img_file:
+                            image_bytes = img_file.read()
+                            descricao = descrever_imagem_azure(image_bytes)
+                            texto_final = f"Descrição da imagem: {descricao}"
+                    except Exception as e:
+                        print(f"Erro ao processar imagem: {e}")
+                        texto_final = f"Imagem carregada, mas ocorreu um erro ao processá-la: {str(e)}"
+                else:
+                    texto_final = "Formato de arquivo não suportado."
+
+            if texto_final:
+                nome_arquivo = f"audio_{datetime.now().strftime('%Y%m%d%H%M%S')}.mp3"
+                caminho = os.path.join(AUDIO_FOLDER, nome_arquivo)
+                voice = request.form.get("voz", "pt-BR-AntonioNeural")
+                rate = request.form.get("velocidade", "+0%")
+                
+                async def gerar_audio():
+                    try:
+                        communicate = edge_tts.Communicate(texto_final, voice, rate=rate)
+                        await communicate.save(caminho)
+                        print(f"Áudio gerado com sucesso: {caminho}")
+                    except Exception as e:
+                        print(f"Erro ao gerar áudio: {e}")
+                        raise e
+                        
+                asyncio.run(gerar_audio())
+                audio_file = nome_arquivo
+                
+        except Exception as e:
+            print(f"Erro geral na aplicação: {e}")
+            import traceback
+            traceback.print_exc()
+            return f"Erro interno: {str(e)}", 500
 
     return render_template("index.html", audio_file=audio_file)
 
@@ -148,4 +176,4 @@ def som_sucesso():
     return send_from_directory('static', 'sucesso.mp3')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True, host="0.0.0.0", port=5000)
