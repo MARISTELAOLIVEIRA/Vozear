@@ -71,13 +71,18 @@
     // Função global para modo escuro
     function toggleDarkMode() {
         document.body.classList.toggle("dark-mode");
-        localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+        const isDark = document.body.classList.contains("dark-mode");
+        localStorage.setItem("dark-mode", isDark.toString());
+        console.log("Dark mode toggled:", isDark);
     }
 
     document.addEventListener("DOMContentLoaded", function() {
         // Carregar modo escuro salvo
-        if (localStorage.getItem("dark-mode") === "true") {
+        const savedDarkMode = localStorage.getItem("dark-mode");
+        console.log("Saved dark mode:", savedDarkMode);
+        if (savedDarkMode === "true") {
             document.body.classList.add("dark-mode");
+            console.log("Dark mode loaded from storage");
         }
 
         // Event listener para navegação

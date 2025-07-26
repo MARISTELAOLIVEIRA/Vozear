@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Dark Mode</title>
+    <style>
+        body { padding: 20px; background: white; color: black; transition: all 0.3s; }
+        .dark-mode { background: #121212 !important; color: #f2f2f2 !important; }
+        button { padding: 10px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Teste do Modo Escuro</h1>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️ Toggle Dark Mode</button>
+    <p>Este é um teste para verificar se o modo escuro funciona.</p>
+    
+    <script>
+        // Função global para modo escuro
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+            console.log("Dark mode toggled:", document.body.classList.contains("dark-mode"));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Carregar modo escuro salvo
+            if (localStorage.getItem("dark-mode") === "true") {
+                document.body.classList.add("dark-mode");
+            }
+            console.log("Page loaded, dark mode:", localStorage.getItem("dark-mode"));
+        });
+    </script>
+</body>
+</html>
