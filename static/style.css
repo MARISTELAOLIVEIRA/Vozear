@@ -17,13 +17,36 @@ body {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
-    background:url('http://www.cssawds.com/ribbons/brand-award-right.png') no-repeat;
+    background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0.05) 100%), #f2f2f2;
+    background-image: 
+        radial-gradient(circle at top right, rgba(255,215,0,0.3) 0%, transparent 50%),
+        linear-gradient(135deg, #f2f2f2 0%, #e8e8e8 100%);
+    border: 2px solid rgba(255,215,0,0.3);
     color: #333;
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
     position: relative;
     z-index: 1;
+}
+
+/* Efeito de prêmio/selo no canto superior direito */
+body::before {
+    content: "🏆";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 24px;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #FFD700;
+    box-shadow: 0 2px 10px rgba(255,215,0,0.5);
+    z-index: 2;
 }
 
 h1 {
