@@ -27,23 +27,45 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a
 
 # Configuração do banco de dados - suporte MySQL e SQLite
 def get_database_uri():
-    # Primeiro tentar MySQL (Azure)
-    mysql_host = os.environ.get('DB_HOST') or os.environ.get('MYSQL_HOST')
-    mysql_user = os.environ.get('DB_USER') or os.environ.get('MYSQL_USER')
-    mysql_password = os.environ.get('DB_PASSWORD') or os.environ.get('MYSQL_PASSWORD')
-    mysql_database = os.environ.get('DB_NAME') or os.environ.get('MYSQL_DATABASE', 'vozearbd')
+    """Retorna a URI do banco de dados baseada nas variáveis de ambiente"""
+    
+    # Opção 1: DATABASE_URL (padrão Heroku/Azure)
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url:
+        print("🗄️ Usando DATABASE_URL automática")
+        # Converter postgresql:// para mysql:// se necessário
+        if database_url.startswith('postgresql://'):
+            database_url = database_url.replace('postgresql://', 'mysql+pymysql://', 1)
+        elif database_url.startswith('mysql://'):
+            database_url = database_url.replace('mysql://', 'mysql+pymysql://', 1)
+        return database_url
+    
+    # Opção 2: MYSQLCONNSTR_defaultConnection (Azure MySQL in App)
+    mysql_conn_str = os.environ.get('MYSQLCONNSTR_defaultConnection')
+    if mysql_conn_str:
+        print("🗄️ Usando MySQL in App (Azure)")
+        import re
+        match = re.search(r'Database=([^;]+).*Data Source=([^;]+).*User Id=([^;]+).*Password=([^;]+)', mysql_conn_str)
+        if match:
+            db, host, user, password = match.groups()
+            return f"mysql+pymysql://{user}:{password}@{host}/{db}?charset=utf8mb4&ssl_disabled=false"
+    
+    # Opção 3: Variáveis individuais MySQL (manual)
+    mysql_host = os.environ.get('DB_HOST')
+    mysql_user = os.environ.get('DB_USER') 
+    mysql_password = os.environ.get('DB_PASSWORD')
+    mysql_database = os.environ.get('DB_NAME', 'vozearbd')  # Padrão vozearbd
     mysql_port = os.environ.get('DB_PORT', '3306')
     
     if mysql_host and mysql_user and mysql_password:
-        # MySQL no Azure - codificar senha para URL
+        print(f"🗄️ Conectando ao MySQL: {mysql_host}/{mysql_database}")
         from urllib.parse import quote_plus
-        encoded_password = quote_plus(mysql_password)
-        print(f"🗄️ Conectando ao MySQL: {mysql_host}:{mysql_port}/{mysql_database}")
-        return f"mysql+pymysql://{mysql_user}:{encoded_password}@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4&ssl_verify_cert=false&ssl_verify_identity=false"
-    else:
-        # Fallback para SQLite local
-        print("🗄️ Usando SQLite local (desenvolvimento)")
-        return 'sqlite:///vozear_comentarios.db'
+        password_encoded = quote_plus(mysql_password)
+        return f"mysql+pymysql://{mysql_user}:{password_encoded}@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4&ssl_disabled=false"
+    
+    # Fallback: SQLite local
+    print("🗄️ Usando SQLite local (desenvolvimento)")
+    return 'sqlite:///vozear_comentarios.db'
 
 try:
     app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
