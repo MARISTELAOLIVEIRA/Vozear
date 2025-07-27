@@ -19,30 +19,67 @@ app = Flask(__name__)
 AUDIO_FOLDER = "audio"
 ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff'}
 
+# Criar diretório de áudio se não existir
+if not os.path.exists(AUDIO_FOLDER):
+    os.makedirs(AUDIO_FOLDER)
+
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a59277976e9c00c59914b53f5abef33cfa67669a3661d'
 
-# Configuração do banco de dados SQLite
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///vozear_comentarios.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# Inicializar SQLAlchemy
-db = SQLAlchemy(app)
-
-# Modelo de Comentário
-class Comentario(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=True)
-    comentario = db.Column(db.Text, nullable=False)
-    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
-    aprovado = db.Column(db.Boolean, default=False)
+# Configuração do banco de dados - suporte MySQL e SQLite
+def get_database_uri():
+    # Primeiro tentar MySQL (Azure)
+    mysql_host = os.environ.get('DB_HOST') or os.environ.get('MYSQL_HOST')
+    mysql_user = os.environ.get('DB_USER') or os.environ.get('MYSQL_USER')
+    mysql_password = os.environ.get('DB_PASSWORD') or os.environ.get('MYSQL_PASSWORD')
+    mysql_database = os.environ.get('DB_NAME') or os.environ.get('MYSQL_DATABASE', 'vozearbd')
+    mysql_port = os.environ.get('DB_PORT', '3306')
     
-    def __repr__(self):
-        return f'<Comentario {self.nome}: {self.comentario[:50]}...>'
+    if mysql_host and mysql_user and mysql_password:
+        # MySQL no Azure - codificar senha para URL
+        from urllib.parse import quote_plus
+        encoded_password = quote_plus(mysql_password)
+        print(f"🗄️ Conectando ao MySQL: {mysql_host}:{mysql_port}/{mysql_database}")
+        return f"mysql+pymysql://{mysql_user}:{encoded_password}@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4&ssl_verify_cert=false&ssl_verify_identity=false"
+    else:
+        # Fallback para SQLite local
+        print("🗄️ Usando SQLite local (desenvolvimento)")
+        return 'sqlite:///vozear_comentarios.db'
 
-# Criar tabelas
-with app.app_context():
-    db.create_all()
+try:
+    app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
+    print(f"Configuração de banco: {app.config['SQLALCHEMY_DATABASE_URI'].split('@')[0]}@...")  # Log sem credenciais
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Inicializar SQLAlchemy
+    db = SQLAlchemy(app)
+    
+    # Modelo de Comentário
+    class Comentario(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        nome = db.Column(db.String(100), nullable=False)
+        email = db.Column(db.String(100), nullable=True)
+        comentario = db.Column(db.Text, nullable=False)
+        data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+        aprovado = db.Column(db.Boolean, default=False)
+        
+        def __repr__(self):
+            return f'<Comentario {self.nome}: {self.comentario[:50]}...>'
+    
+    # Tentar criar tabelas
+    with app.app_context():
+        db.create_all()
+    
+    BANCO_ATIVO = True
+    print("✅ Banco de dados SQLite inicializado com sucesso")
+    
+except Exception as e:
+    print(f"⚠️ Erro no banco de dados (funcionando sem comentários): {e}")
+    BANCO_ATIVO = False
+    db = None
+    
+    # Classe mock para quando não há banco
+    class Comentario:
+        pass
 
 # Configurações de admin
 ADMIN_USERNAME = "admin"
@@ -134,26 +171,38 @@ def descrever_imagem_azure(image_bytes):
 
 @app.route("/sobre", methods=["GET", "POST"])
 def sobre():
-    if request.method == "POST":
-        nome = request.form.get("nome")
-        email = request.form.get("email", "")
-        comentario_texto = request.form.get("comentario")
-        
-        if nome and comentario_texto:
-            novo_comentario = Comentario(
-                nome=nome,
-                email=email,
-                comentario=comentario_texto
-            )
-            db.session.add(novo_comentario)
-            db.session.commit()
-            flash("Comentário enviado com sucesso! Aguardando moderação.", "success")
-            return redirect(url_for('sobre'))
-        else:
-            flash("Por favor, preencha pelo menos o nome e o comentário.", "error")
+    if not BANCO_ATIVO:
+        # Funcionar sem banco - apenas mostrar página
+        return render_template("sobre.html", comentarios=[])
     
-    # Buscar comentários aprovados
-    comentarios_aprovados = Comentario.query.filter_by(aprovado=True).order_by(Comentario.data_criacao.desc()).all()
+    try:
+        if request.method == "POST":
+            nome = request.form.get("nome")
+            email = request.form.get("email", "")
+            comentario_texto = request.form.get("comentario")
+            
+            if nome and comentario_texto:
+                novo_comentario = Comentario(
+                    nome=nome,
+                    email=email,
+                    comentario=comentario_texto
+                )
+                db.session.add(novo_comentario)
+                db.session.commit()
+                flash("Comentário enviado com sucesso! Aguardando moderação.", "success")
+                return redirect(url_for('sobre'))
+            else:
+                flash("Por favor, preencha pelo menos o nome e o comentário.", "error")
+        
+        # Buscar comentários aprovados
+        comentarios_aprovados = Comentario.query.filter_by(aprovado=True).order_by(Comentario.data_criacao.desc()).all()
+        
+        return render_template("sobre.html", comentarios=comentarios_aprovados)
+        
+    except Exception as e:
+        print(f"Erro na rota sobre: {e}")
+        # Se der erro, funcionar sem comentários
+        return render_template("sobre.html", comentarios=[])
     
     return render_template("sobre.html", comentarios=comentarios_aprovados)
 
@@ -186,17 +235,34 @@ def admin_logout():
 @app.route("/admin/comentarios")
 @login_required
 def admin_comentarios():
-    comentarios_pendentes = Comentario.query.filter_by(aprovado=False).order_by(Comentario.data_criacao.desc()).all()
-    return render_template("admin_comentarios.html", comentarios=comentarios_pendentes)
+    if not BANCO_ATIVO:
+        flash("Sistema de comentários indisponível. Funcionalidade em manutenção.", "warning")
+        return render_template("admin_comentarios.html", comentarios=[])
+    
+    try:
+        comentarios_pendentes = Comentario.query.filter_by(aprovado=False).order_by(Comentario.data_criacao.desc()).all()
+        return render_template("admin_comentarios.html", comentarios=comentarios_pendentes)
+    except Exception as e:
+        print(f"Erro ao buscar comentários: {e}")
+        return render_template("admin_comentarios.html", comentarios=[])
 
 # Rota para visualizar todo o banco de dados (agora protegida)
 @app.route("/admin/banco")
 @login_required
 def admin_banco():
-    todos_comentarios = Comentario.query.order_by(Comentario.data_criacao.desc()).all()
-    total_comentarios = len(todos_comentarios)
-    aprovados = len([c for c in todos_comentarios if c.aprovado])
-    pendentes = len([c for c in todos_comentarios if not c.aprovado])
+    if not BANCO_ATIVO:
+        flash("Sistema de comentários indisponível. Funcionalidade em manutenção.", "warning")
+        return render_template("admin_banco.html", comentarios=[], total=0, aprovados=0, pendentes=0)
+    
+    try:
+        todos_comentarios = Comentario.query.order_by(Comentario.data_criacao.desc()).all()
+        total_comentarios = len(todos_comentarios)
+        aprovados = len([c for c in todos_comentarios if c.aprovado])
+        pendentes = len([c for c in todos_comentarios if not c.aprovado])
+    except Exception as e:
+        print(f"Erro ao acessar banco: {e}")
+        flash("Erro ao acessar o banco de dados", "error")
+        return render_template("admin_banco.html", comentarios=[], total=0, aprovados=0, pendentes=0)
     
     return render_template("admin_banco.html", 
                          comentarios=todos_comentarios,
@@ -207,29 +273,50 @@ def admin_banco():
 @app.route("/admin/aprovar/<int:comentario_id>")
 @login_required
 def aprovar_comentario(comentario_id):
-    comentario = Comentario.query.get_or_404(comentario_id)
-    comentario.aprovado = True
-    db.session.commit()
-    flash(f"Comentário de {comentario.nome} aprovado!", "success")
+    if not BANCO_ATIVO:
+        flash("Sistema de comentários indisponível.", "error")
+        return redirect(url_for('admin_comentarios'))
+    
+    try:
+        comentario = Comentario.query.get_or_404(comentario_id)
+        comentario.aprovado = True
+        db.session.commit()
+        flash(f"Comentário de {comentario.nome} aprovado!", "success")
+    except Exception as e:
+        flash("Erro ao aprovar comentário.", "error")
     return redirect(url_for('admin_comentarios'))
 
 @app.route("/admin/rejeitar/<int:comentario_id>")
 @login_required
 def rejeitar_comentario(comentario_id):
-    comentario = Comentario.query.get_or_404(comentario_id)
-    db.session.delete(comentario)
-    db.session.commit()
-    flash(f"Comentário de {comentario.nome} rejeitado!", "warning")
+    if not BANCO_ATIVO:
+        flash("Sistema de comentários indisponível.", "error")
+        return redirect(url_for('admin_comentarios'))
+    
+    try:
+        comentario = Comentario.query.get_or_404(comentario_id)
+        db.session.delete(comentario)
+        db.session.commit()
+        flash(f"Comentário de {comentario.nome} rejeitado!", "warning")
+    except Exception as e:
+        flash("Erro ao rejeitar comentário.", "error")
     return redirect(url_for('admin_comentarios'))
 
 @app.route("/admin/excluir/<int:comentario_id>")
 @login_required
 def excluir_comentario(comentario_id):
-    comentario = Comentario.query.get_or_404(comentario_id)
-    nome_usuario = comentario.nome
-    db.session.delete(comentario)
-    db.session.commit()
-    flash(f"Comentário de {nome_usuario} excluído permanentemente!", "error")
+    if not BANCO_ATIVO:
+        flash("Sistema de comentários indisponível.", "error")
+        return redirect(request.referrer or url_for('admin_banco'))
+    
+    try:
+        comentario = Comentario.query.get_or_404(comentario_id)
+        nome_usuario = comentario.nome
+        db.session.delete(comentario)
+        db.session.commit()
+        flash(f"Comentário de {nome_usuario} excluído permanentemente!", "error")
+    except Exception as e:
+        flash("Erro ao excluir comentário.", "error")
     return redirect(request.referrer or url_for('admin_banco'))
 
 @app.route("/", methods=["GET", "POST"])
