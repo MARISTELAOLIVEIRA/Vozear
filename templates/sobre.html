@@ -11,6 +11,36 @@
     <link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
 
     <style>
+        body::before {
+            content: '';
+            position: fixed;
+            z-index: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            border-radius: 0;
+            box-shadow:
+                0 0 60px 10px #ffe066,
+                0 0 120px 30px #fffbe6 inset;
+            animation: brilhoBorda 3s infinite alternate;
+        }
+
+        @keyframes brilhoBorda {
+            0% {
+                box-shadow:
+                    0 0 30px 5px #ffe066,
+                    0 0 60px 15px #fffbe6 inset;
+            }
+            100% {
+                box-shadow:
+                    0 0 90px 30px #ffe066,
+                    0 0 180px 60px #fffbe6 inset;
+            }
+        }
+
+        body {
+            position: relative;
+            z-index: 1;
+        }
         .header-controls {
             display: flex;
             justify-content: flex-end;
@@ -31,10 +61,51 @@
             align-items: center;
             margin-bottom: 20px;
         }
+
+        .main-content-sobre {
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            background: rgba(255,255,255,0.03);
+            border-radius: 18px;
+            padding: 32px 32px 24px 32px;
+            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);
+        }
+        .comentarios-section {
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            background: rgba(255,255,255,0.02);
+            border-radius: 18px;
+            padding: 32px 32px 24px 32px;
+            box-shadow: 0 2px 16px 0 rgba(0,0,0,0.04);
+        }
+        @media (max-width: 1000px) {
+            .main-content-sobre, .comentarios-section {
+                max-width: 98vw;
+                padding: 18px 4vw 16px 4vw;
+            }
+        }
+        @media (max-width: 600px) {
+            .main-content-sobre, .comentarios-section {
+                padding: 10px 2vw 10px 2vw;
+                border-radius: 8px;
+            }
+        }
         
         .logo-container img {
-            max-width: 150px;
+            max-width: 220px;
             height: auto;
+            filter: drop-shadow(0 0 16px #fffbe6) drop-shadow(0 0 32px #ffe066);
+            animation: brilhoLogo 2.5s infinite alternate;
+            transition: max-width 0.3s;
+        }
+
+        @keyframes brilhoLogo {
+            0% {
+                filter: drop-shadow(0 0 8px #fffbe6) drop-shadow(0 0 16px #ffe066);
+            }
+            100% {
+                filter: drop-shadow(0 0 32px #fffbe6) drop-shadow(0 0 64px #ffe066);
+            }
         }
         
         @media (max-width: 768px) {
@@ -49,7 +120,7 @@
             }
             
             .logo-container img {
-                max-width: 120px;
+                max-width: 140px;
             }
         }
         
@@ -60,7 +131,7 @@
             }
             
             .logo-container img {
-                max-width: 100px;
+                max-width: 90px;
             }
         }
     </style>
@@ -77,13 +148,18 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Carregar modo escuro salvo
+        // Carregar modo escuro salvo ou ativar por padrão
         const savedDarkMode = localStorage.getItem("dark-mode");
         console.log("Saved dark mode:", savedDarkMode);
-        if (savedDarkMode === "true") {
+        if (savedDarkMode === null || savedDarkMode === "true") {
             document.body.classList.add("dark-mode");
-            console.log("Dark mode loaded from storage");
+            if (savedDarkMode === null) {
+                localStorage.setItem("dark-mode", "true");
+            }
+            console.log("Dark mode ativado por padrão ou carregado do storage");
         }
+
+        // (Removido ajuste dinâmico do emoji do botão de modo escuro)
 
         // Event listener para navegação
         const voltarBtn = document.getElementById('voltar-btn');
@@ -96,8 +172,8 @@
 </script>
 
 <div class="header-controls">
-    <button id="voltar-btn" style="font-size: 10px;">Voltar</button>
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+    <button id="voltar-btn" style="font-size: 15px;" title="Voltar à Página Principal">Voltar</button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Alternar Modo Escuro">🌙 ☀️</button>
     <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa">⚙️</a>
 </div>
 
@@ -105,42 +181,44 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo">
 </div>
 
-<h1>SOBRE</h1>
-<div style="text-align: justify;">
-    <p> 
-        O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em>Maristela Oliveira</em>, e nasceu da necessidade real de tornar o conteúdo digital 
-        mais acessível, especialmente para pessoas com deficiência visual. Foi desenvolvido em Python🐍 com o framework web Flask🌶️.
-        <br><br>
-        A aplicação utiliza a tecnologia de síntese de voz da <span style="color: #1a8debff;">Microsoft</span>, com vozes naturais e de alta qualidade, e a inteligência artificial do <span style="color: #1a8debff;">Azure Computer Vision</span>, um serviço que analisa e descreve imagens automaticamente. Isso 
-        permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
-        posteriormente convertida em áudio.
-        <br><br>
+<div class="main-content-sobre">
+    <h1 style="text-align:center;">SOBRE</h1>
+    <div style="text-align: justify;">
+        <p> 
+            O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em>Maristela Oliveira</em>, e nasceu da necessidade real de tornar o conteúdo digital 
+            mais acessível, especialmente para pessoas com deficiência visual. Foi desenvolvido em Python🐍 com o framework web Flask🌶️.
+            <br><br>
+            A aplicação utiliza a tecnologia de síntese de voz da <span style="color: #1a8debff;">Microsoft</span>, com vozes naturais e de alta qualidade, e a inteligência artificial do <span style="color: #1a8debff;">Azure Computer Vision</span>, um serviço que analisa e descreve imagens automaticamente. Isso 
+            permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
+            posteriormente convertida em áudio.
+            <br><br>
 
-        Entre os recursos disponíveis, o usuário pode:
-        <br>
-        ✔️ Inserir texto manualmente;
-        <br>
-        ✔️ Enviar arquivos PDF com ou sem imagens;
-        <br>
-        ✔️ Usar a própria voz ativando o microfone (gerando um arquivo de texto);
-        <br>
-        ✔️ Baixar o texto gerado a partir do áudio;
-        <br>
-        ✔️ Enviar imagens que serão descritas automaticamente por IA;
-        <br>
-        ✔️ Inserir uma URL para que o sistema leia o conteúdo da página;
-        <br>
-        ✔️ Escolher diferentes vozes;
-        <br>
-        ✔️ Ajustar a velocidade da leitura;
-        <br>
-        ✔️ Ouvir o áudio gerado diretamente no navegador;
-        <br>
-        ✔️ Fazer o download dos arquivos gerados, disponível por 10 minutos após a conversão,
-        após esse período, os arquivos são removidos do servidor automaticamente para economizar espaço.
-    </p>
-    <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato</p>
-</div> 
+            Entre os recursos disponíveis, o usuário pode:
+            <br>
+            ✔️ Inserir texto manualmente;
+            <br>
+            ✔️ Enviar arquivos PDF com ou sem imagens;
+            <br>
+            ✔️ Usar a própria voz ativando o microfone (gerando um arquivo de texto);
+            <br>
+            ✔️ Baixar o texto gerado a partir do áudio;
+            <br>
+            ✔️ Enviar imagens que serão descritas automaticamente por IA;
+            <br>
+            ✔️ Inserir uma URL para que o sistema leia o conteúdo da página;
+            <br>
+            ✔️ Escolher diferentes vozes;
+            <br>
+            ✔️ Ajustar a velocidade da leitura;
+            <br>
+            ✔️ Ouvir o áudio gerado diretamente no navegador;
+            <br>
+            ✔️ Fazer o download dos arquivos gerados, disponível por 10 minutos após a conversão,
+            após esse período, os arquivos são removidos do servidor automaticamente para economizar espaço.
+        </p>
+        <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato</p>
+    </div>
+</div>
 
 <!-- Seção de Comentários -->
 <div class="comentarios-section" style="margin-top: 40px;">

@@ -35,8 +35,20 @@
         }
         
         .logo-container img {
-            max-width: 150px;
+            max-width: 220px;
             height: auto;
+            filter: drop-shadow(0 0 16px #fffbe6) drop-shadow(0 0 32px #ffe066);
+            animation: brilhoLogo 2.5s infinite alternate;
+            transition: max-width 0.3s;
+        }
+
+        @keyframes brilhoLogo {
+            0% {
+                filter: drop-shadow(0 0 8px #fffbe6) drop-shadow(0 0 16px #ffe066);
+            }
+            100% {
+                filter: drop-shadow(0 0 32px #fffbe6) drop-shadow(0 0 64px #ffe066);
+            }
         }
         
         @media (max-width: 768px) {
@@ -57,7 +69,7 @@
             }
             
             .logo-container img {
-                max-width: 120px;
+                max-width: 140px;
             }
         }
         
@@ -68,7 +80,7 @@
             }
             
             .logo-container img {
-                max-width: 100px;
+                max-width: 90px;
             }
         }
     </style>
@@ -85,12 +97,15 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        // Carregar modo escuro salvo
+        // Carregar modo escuro salvo ou ativar por padrão
         const savedDarkMode = localStorage.getItem("dark-mode");
         console.log("Saved dark mode:", savedDarkMode);
-        if (savedDarkMode === "true") {
+        if (savedDarkMode === null || savedDarkMode === "true") {
             document.body.classList.add("dark-mode");
-            console.log("Dark mode loaded from storage");
+            if (savedDarkMode === null) {
+                localStorage.setItem("dark-mode", "true");
+            }
+            console.log("Dark mode ativado por padrão ou carregado do storage");
         }
 
         // Event listeners para navegação
@@ -110,8 +125,8 @@
     });
 </script>
 <div class="header-controls">
-    <button id="sobre-btn" style="font-size: 10px;">Sobre</button>
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 ☀️</button>
+    <button id="sobre-btn" style="font-size: 15px;" title="Sobre o Vozear">Sobre</button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Alternar Modo Escuro">🌙 ☀️</button>
     <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa">⚙️</a>
 </div>
 
@@ -125,23 +140,30 @@
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
     <textarea name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50"></textarea><br><br>
 
-<label>Envie um arquivo PDF ou imagem:</label>
+<label>Envie um arquivo PDF ( com ou sem imagens) ou uma imagem para gerar a audiodescrição:</label>
 <input type="file" name="arquivo" accept=".pdf,.jpg,.jpeg,.png,.bmp,.gif,.tiff"><br><br>
-<label>Ou insira uma URL:</label>
+<label>Ou insira uma URL para gerar a audiodescrição:</label>
 <input type="url" name="url" placeholder="https://exemplo.com"><br><br>
 
-    <label>Escolha a voz:</label>
-    <select name="voz">
-        <option value="pt-BR-FranciscaNeural">Francisca (feminina)</option>
-        <option value="pt-BR-AntonioNeural">Antônio (masculina)</option>
-    </select><br><br>
 
-    <label>Velocidade:</label>
-    <select name="velocidade">
-        <option value="+0%">Normal</option>
-        <option value="-25%">Mais devagar</option>
-        <option value="+25%">Mais rápido</option>
-    </select><br><br>
+    <div class="voz-velocidade-container">
+        <div>
+            <label for="voz">Escolha a voz:</label>
+            <select name="voz" id="voz">
+                <option value="pt-BR-FranciscaNeural">Francisca (feminina)</option>
+                <option value="pt-BR-AntonioNeural">Antônio (masculina)</option>
+            </select>
+        </div>
+        <div>
+            <label for="velocidade">Velocidade:</label>
+            <select name="velocidade" id="velocidade">
+                <option value="+0%">Normal</option>
+                <option value="-25%">Mais devagar</option>
+                <option value="+25%">Mais rápido</option>
+            </select>
+        </div>
+    </div>
+    <br>
 
     <button type="submit">Converter</button>
     <button type="button" id="botao-falar">🎤 Falar</button>
@@ -154,6 +176,25 @@
     </div>
 
 </form>
+
+<style>
+    .voz-velocidade-container {
+        display: flex;
+        gap: 20px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+    .voz-velocidade-container > div {
+        display: flex;
+        flex-direction: column;
+    }
+    @media (max-width: 600px) {
+        .voz-velocidade-container {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
 
 {% if audio_file %}
     <audio controls>
