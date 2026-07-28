@@ -1,4 +1,24 @@
 /* CSS limpo para o projeto Vozear com Azure Computer Vision */
+
+/* Acessibilidade: texto visível apenas para leitores de tela */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Garantir foco visível para navegação por teclado */
+:focus-visible {
+    outline: 3px solid #ffe066;
+    outline-offset: 2px;
+}
+
 html {
     height: 100%;
     background: 

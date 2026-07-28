@@ -87,6 +87,23 @@
 </head>
 
 <body>
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo</a>
+<style>
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #ffe066;
+        color: #000;
+        padding: 8px 16px;
+        z-index: 9999;
+        font-weight: bold;
+        border-radius: 0 0 4px 0;
+    }
+    .skip-link:focus {
+        top: 0;
+    }
+</style>
 <script>
     // Função global para modo escuro
     function toggleDarkMode() {
@@ -125,25 +142,28 @@
     });
 </script>
 <div class="header-controls">
-    <button id="sobre-btn" style="font-size: 15px;" title="Sobre o Vozear">Sobre</button>
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Alternar Modo Escuro">🌙 ☀️</button>
-    <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa">⚙️</a>
+    <button id="sobre-btn" style="font-size: 15px;" title="Sobre o Vozear" aria-label="Ir para a página Sobre">Sobre</button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Alternar Modo Escuro" aria-label="Alternar modo escuro e claro">🌙 ☀️</button>
+    <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa" aria-label="Área Administrativa">⚙️</a>
 </div>
 
 <div class="logo-container">
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo">
 </div>
 
+<main id="conteudo-principal">
 <h1>🎧 Transforme Palavras em Experiências Sonoras ✨</h1>
-<p style="font-size: small;">Ao corverter e conferir, faça o download, o arquivo de aúdio só ficará disponível por 10 minutos</p>
+<p style="font-size: small;">Ao converter e conferir, faça o download. O arquivo de áudio só ficará disponível por 10 minutos.</p>
 
-<form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()">
-    <textarea name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50"></textarea><br><br>
+<form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()" aria-label="Formulário de conversão de texto em áudio">
+    <label for="texto">Digite ou cole o texto para converter em áudio:</label><br>
+    <textarea id="texto" name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50" aria-describedby="dica-texto"></textarea>
+    <span id="dica-texto" class="sr-only">Campo de texto para converter em áudio. Você também pode usar o microfone.</span><br><br>
 
-<label>Envie um arquivo PDF ( com ou sem imagens) ou uma imagem para gerar a audiodescrição:</label>
-<input type="file" name="arquivo" accept=".pdf,.jpg,.jpeg,.png,.bmp,.gif,.tiff"><br><br>
-<label>Ou insira uma URL para gerar a audiodescrição:</label>
-<input type="url" name="url" placeholder="https://exemplo.com"><br><br>
+<label for="arquivo">Envie um arquivo PDF (com ou sem imagens) ou uma imagem para gerar a audiodescrição:</label>
+<input type="file" id="arquivo" name="arquivo" accept=".pdf,.jpg,.jpeg,.png,.bmp,.gif,.tiff"><br><br>
+<label for="url">Ou insira uma URL para gerar a audiodescrição:</label>
+<input type="url" id="url" name="url" placeholder="https://exemplo.com"><br><br>
 
 
     <div class="voz-velocidade-container">
@@ -171,7 +191,7 @@
     <button type="button" id="botao-salvar">💾 Baixar Texto</button>
     <button type="button" id="limpar-btn">🔄 Limpar</button>
 
-    <div class="progress-bar" id="barra">
+    <div class="progress-bar" id="barra" role="progressbar" aria-label="Processando conversão" aria-live="polite" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-bar-fill"></div>
     </div>
 
@@ -197,14 +217,17 @@
 </style>
 
 {% if audio_file %}
-    <p>✅ Áudio gerado com sucesso! Ouça abaixo e clique em <strong>Baixar MP3</strong> quando quiser salvar.</p>
-    <audio controls>
-        <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
-        Seu navegador não suporta áudio.
-    </audio>
-    <br>
-    <button type="button" onclick="baixarAudio('{{ url_for('audio', filename=audio_file) }}', '{{ audio_file }}')">⬇️ Baixar MP3</button>
+    <section aria-label="Resultado da conversão" aria-live="polite">
+        <p>✅ Áudio gerado com sucesso! Ouça abaixo e clique em <strong>Baixar MP3</strong> quando quiser salvar.</p>
+        <audio controls aria-label="Áudio gerado pelo Vozear">
+            <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
+            Seu navegador não suporta áudio HTML5. <a href="{{ url_for('audio', filename=audio_file) }}">Baixar o áudio</a>.
+        </audio>
+        <br>
+        <button type="button" onclick="baixarAudio('{{ url_for('audio', filename=audio_file) }}', '{{ audio_file }}')">⬇️ Baixar MP3</button>
+    </section>
 {% endif %}
+</main>
 <footer>
     &copy; <a href="https://stela.tec.br" target="_blank" rel="noopener noreferrer"> Maristela </a> 🐍 🌶️ 2025
 </footer>
