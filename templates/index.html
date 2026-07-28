@@ -197,11 +197,13 @@
 </style>
 
 {% if audio_file %}
+    <p>✅ Áudio gerado com sucesso! Ouça abaixo e clique em <strong>Baixar MP3</strong> quando quiser salvar.</p>
     <audio controls>
         <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
         Seu navegador não suporta áudio.
     </audio>
-    <p><a href="{{ url_for('audio', filename=audio_file) }}" download>✅ Áudio gerado com sucesso! ⬇️ BAIXAR MP3</a></p>
+    <br>
+    <button type="button" onclick="baixarAudio('{{ url_for('audio', filename=audio_file) }}', '{{ audio_file }}')">⬇️ Baixar MP3</button>
 {% endif %}
 <footer>
     &copy; <a href="https://stela.tec.br" target="_blank" rel="noopener noreferrer"> Maristela </a> 🐍 🌶️ 2025
@@ -209,6 +211,15 @@
 <script>
     function mostrarProgresso() {
         document.getElementById("barra").style.display = "block";
+    }
+
+    function baixarAudio(url, nomeArquivo) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = nomeArquivo;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
 <script src="{{ url_for('static', filename='js/vozear_microfone.js') }}"></script>
