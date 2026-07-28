@@ -41,6 +41,25 @@
             position: relative;
             z-index: 1;
         }
+
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            background: #045304;
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 0 0 8px 8px;
+            z-index: 1000;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .skip-link:focus {
+            left: 12px;
+            top: 0;
+        }
+
         .header-controls {
             display: flex;
             justify-content: flex-end;
@@ -138,6 +157,8 @@
 </head>
 
 <body>
+<a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+
 <script>
     // Função global para modo escuro
     function toggleDarkMode() {
@@ -171,25 +192,29 @@
     });
 </script>
 
-<div class="header-controls">
-    <button id="voltar-btn" style="font-size: 15px;" title="Voltar à Página Principal">Voltar</button>
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Alternar Modo Escuro">🌙 ☀️</button>
-    <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa">⚙️</a>
-</div>
+<header class="header-controls" aria-label="Ações de navegação e visualização">
+    <button id="voltar-btn" type="button" style="font-size: 15px;" title="Voltar à Página Principal" aria-label="Voltar para a página principal">Voltar</button>
+    <button class="dark-mode-toggle" type="button" onclick="toggleDarkMode()" title="Alternar Modo Escuro" aria-label="Alternar entre modo escuro e claro">🌙 ☀️</button>
+    <a href="{{ url_for('admin_login') }}" class="admin-access-btn" title="Área Administrativa" aria-label="Ir para a área administrativa">
+        <span aria-hidden="true">⚙️</span>
+        <span class="sr-only">Área administrativa</span>
+    </a>
+</header>
 
 <div class="logo-container">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Vozear Logo">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do Vozear">
 </div>
 
+<main id="conteudo-principal" tabindex="-1">
 <div class="main-content-sobre">
-    <h1 style="text-align:center;">SOBRE</h1>
+    <h1 style="text-align:center;">Sobre</h1>
     <div style="text-align: justify;">
         <p> 
-            O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em><a href="https://stela.tec.br" target="_blank" rel="noopener noreferrer">Maristela Oliveira</a></em>, e nasceu da necessidade real de tornar o conteúdo digital 
-            mais acessível, especialmente para pessoas com deficiência visual. Foi desenvolvido em Python🐍 com o framework web Flask🌶️.
+            O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em> Profª Maristela Oliveira </em>, e nasceu da necessidade real de tornar o conteúdo digital 
+            mais acessível, especialmente para alunos com deficiência visual. Foi desenvolvido em Python🐍 com o framework web Flask🌶️.
             <br><br>
-            A aplicação utiliza a tecnologia de síntese de voz da <span style="color: #1a8debff;">Microsoft</span>, com vozes naturais e de alta qualidade, e a inteligência artificial do <span style="color: #1a8debff;">Azure Computer Vision</span>, um serviço que analisa e descreve imagens automaticamente. Isso 
-            permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
+            A aplicação utiliza a tecnologia de síntese de voz da <span style="color: #1a8debff;">Microsoft</span>, com vozes naturais e de alta qualidade, e a inteligência artificial do <span style="color: #1a8debff;"> Azure Computer Vision</span>
+            , um serviço que analisa e descreve imagens automaticamente. Isso permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
             posteriormente convertida em áudio.
             <br><br>
 
@@ -221,8 +246,10 @@
 </div>
 
 <!-- Seção de Comentários -->
-<div class="comentarios-section" style="margin-top: 40px;">
-    <h2 style="color: #045304ff; margin-bottom: 20px;">💬 Comentários dos Usuários</h2>
+<section class="comentarios-section" style="margin-top: 40px;" aria-labelledby="comentarios-titulo">
+    <h2 id="comentarios-titulo" style="color: #045304ff; margin-bottom: 20px;">
+        <span aria-hidden="true">💬</span> Comentários
+    </h2>
     
     <!-- Mensagens Flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -245,7 +272,7 @@
                         color: #856404; 
                         border: 1px solid #ffeaa7;
                     {% endif %}
-                ">
+                " role="status" aria-live="polite">
                     {{ message }}
                 </div>
             {% endfor %}
@@ -260,8 +287,8 @@
         margin-bottom: 30px;
         backdrop-filter: blur(10px);
     ">
-        <h3 style="margin-bottom: 15px;">✍️ Deixe seu comentário</h3>
-        <form method="POST" action="{{ url_for('sobre') }}">
+        <h3 style="margin-bottom: 15px;"><span aria-hidden="true">✍️</span> Deixe seu comentário</h3>
+        <form method="POST" action="{{ url_for('sobre') }}" aria-describedby="regras-comentario">
             <div style="margin-bottom: 15px;">
                 <label for="nome" style="display: block; margin-bottom: 5px; font-weight: bold;">Nome *</label>
                 <input type="text" id="nome" name="nome" required style="
@@ -271,7 +298,7 @@
                     border-radius: 5px; 
                     font-size: 16px;
                     box-sizing: border-box;
-                ">
+                " autocomplete="name">
             </div>
             
             <div style="margin-bottom: 15px;">
@@ -283,7 +310,7 @@
                     border-radius: 5px; 
                     font-size: 16px;
                     box-sizing: border-box;
-                ">
+                " autocomplete="email">
             </div>
             
             <div style="margin-bottom: 15px;">
@@ -309,17 +336,17 @@
                 cursor: pointer; 
                 font-weight: bold;
             ">
-                📝 Enviar Comentário
+                <span aria-hidden="true">📝</span> Enviar Comentário
             </button>
         </form>
-        <p style="font-size: 12px; margin-top: 10px; opacity: 0.8;">
+        <p id="regras-comentario" style="font-size: 12px; margin-top: 10px; opacity: 0.8;">
             * Todos os comentários passam por moderação antes de serem publicados.
         </p>
     </div>
     
     <!-- Lista de Comentários Aprovados -->
-    <div class="comentarios-lista">
-        <h3 style="margin-bottom: 20px;">📖 Comentários da Comunidade</h3>
+    <section class="comentarios-lista" aria-labelledby="comunidade-titulo">
+        <h3 id="comunidade-titulo" style="margin-bottom: 20px;"><span aria-hidden="true">📖</span> Comentários da Comunidade</h3>
         
         {% if comentarios %}
             {% for comentario in comentarios %}
@@ -337,7 +364,7 @@
                         margin-bottom: 10px;
                     ">
                         <strong style="color: #045304ff;">{{ comentario.nome }}</strong>
-                        <small style="opacity: 0.7;">{{ comentario.data_criacao.strftime('%d/%m/%Y às %H:%M') }}</small>
+                        <small style="opacity: 0.7;"><time>{{ comentario.data_criacao.strftime('%d/%m/%Y às %H:%M') }}</time></small>
                     </div>
                     <div class="comentario-texto" style="line-height: 1.6;">
                         {{ comentario.comentario }}
@@ -352,14 +379,15 @@
                 border-radius: 8px; 
                 opacity: 0.7;
             ">
-                <p>🤔 Ainda não há comentários. Seja o primeiro a compartilhar sua experiência!</p>
+                <p><span aria-hidden="true">🤔</span> Ainda não há comentários revisados. Compartilhe sua experiência!</p>
             </div>
         {% endif %}
-    </div>
-</div> 
+    </section>
+</section>
+</main>
 
 <footer>
-    &copy; <a href="https://stela.tec.br" target="_blank" rel="noopener noreferrer"> Maristela </a> 🐍 🌶️ 2025
+    &copy;  Maristela <span aria-hidden="true">🐍 🌶️</span> 2026
 </footer>
 
 </body>
