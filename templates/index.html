@@ -152,13 +152,21 @@
 </div>
 
 <main id="conteudo-principal">
-<h1>🎧 Transforme Palavras em Experiências Sonoras ✨</h1>
+<h1 style="font-size: 22px;">🎧 Transforme Palavras em Experiências Sonoras ✨</h1>
 <p style="font-size: small;">Ao converter e conferir, faça o download. O arquivo de áudio só ficará disponível por 10 minutos.</p>
 
 <form method="post" enctype="multipart/form-data" onsubmit="mostrarProgresso()" aria-label="Formulário de conversão de texto em áudio">
-    <label for="texto">Digite ou cole o texto para converter em áudio:</label><br>
+    <label for="texto">Digite ou cole o texto para converter em áudio ou clique no botão "Falar" para falar diretamente e gerar texto</label><br>
     <textarea id="texto" name="texto" placeholder="Digite ou cole o texto..." rows="5" cols="50" aria-describedby="dica-texto"></textarea>
     <span id="dica-texto" class="sr-only">Campo de texto para converter em áudio. Você também pode usar o microfone.</span><br><br>
+    
+    <button type="submit">Converter</button>
+    <button type="button" id="botao-falar">🎤 Falar</button>
+    <button type="button" id="botao-parar" style="display:none;">🛑 Parar</button>
+    <button type="button" id="botao-salvar">💾 Baixar Texto</button>
+    <button type="button" id="limpar-btn">🔄 Limpar</button>
+
+
 
 <label for="arquivo">Envie um arquivo PDF (com ou sem imagens) ou uma imagem para gerar a audiodescrição:</label>
 <input type="file" id="arquivo" name="arquivo" accept=".pdf,.jpg,.jpeg,.png,.bmp,.gif,.tiff"><br><br>
@@ -185,13 +193,9 @@
     </div>
     <br>
 
-    <button type="submit">Converter</button>
-    <button type="button" id="botao-falar">🎤 Falar</button>
-    <button type="button" id="botao-parar" style="display:none;">🛑 Parar</button>
-    <button type="button" id="botao-salvar">💾 Baixar Texto</button>
-    <button type="button" id="limpar-btn">🔄 Limpar</button>
+    
 
-    <div class="progress-bar" id="barra" role="progressbar" aria-label="Processando conversão" aria-live="polite" aria-valuemin="0" aria-valuemax="100">
+<div class="progress-bar" id="barra" role="progressbar" aria-label="Processando conversão" aria-live="polite" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-bar-fill"></div>
     </div>
 
