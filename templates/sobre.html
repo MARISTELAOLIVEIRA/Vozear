@@ -118,6 +118,22 @@
             transition: max-width 0.3s;
         }
 
+        .inline-icon {
+            height: 1.2em;
+            width: auto;
+            vertical-align: middle;
+            display: inline-block;
+            margin: 0 2px;
+        }
+
+        .logo-credit {
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.75;
+            margin-top: 6px;
+            margin-bottom: 0;
+        }
+
         @keyframes brilhoLogo {
             0% {
                 filter: drop-shadow(0 0 8px #fffbe6) drop-shadow(0 0 16px #ffe066);
@@ -200,8 +216,13 @@
     </a>
 </header>
 
-<div class="logo-container">
+<div class="logo-container" style="flex-direction: column;">
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do Vozear">
+    <p class="logo-credit">
+        Logo criada com IA do
+        <img src="{{ url_for('static', filename='canva-original.svg') }}" alt="Canva" class="inline-icon">
+        Canva
+    </p>
 </div>
 
 <main id="conteudo-principal" tabindex="-1">
@@ -210,12 +231,17 @@
     <div style="text-align: justify;">
         <p> 
             O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em>Profª Maristela Oliveira</em>, e nasceu da necessidade real de tornar o conteúdo digital 
-            mais acessível, especialmente para alunos com deficiência visual, dificuldades de leitura e (/ou) escrita ou alguma neurodivergência. Foi desenvolvido em Python🐍 com o framework web Flask🌶️ e banco de dados MySQL.
+            mais acessível, especialmente para alunos com deficiência visual, dificuldades de leitura e (/ou) escrita ou alguma neurodivergência. Foi desenvolvido em
+            Python <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python" class="inline-icon">
+            com o framework web Flask <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" class="inline-icon">
+            e banco de dados MySQL.
             <br><br>
             O aluno que utiliza ledores de tela, não encontrará dificuldades em acessar o conteúdo do site, pois ele foi projetado para ser totalmente compatível com tecnologias assistivas. Além disso, o sistema é responsivo, garantindo uma experiência de usuário consistente em dispositivos móveis e desktops.
             As pessoas sensíveis à luz intensa ou que preferem uma interface mais escura podem ativar o modo escuro, proporcionando uma experiência visual mais confortável.
             <br><br>
-            A aplicação utiliza as tecnologias <span style="color: #1a8debff;">Microsoft Azure</span>:
+            A aplicação utiliza as tecnologias
+            <img src="{{ url_for('static', filename='azure-original.svg') }}" alt="Microsoft Azure" class="inline-icon">
+            <span style="color: #1a8debff;">Microsoft Azure</span>:
             <br><br>
             ✔️ Serviço de Aplicativo com suporte a múltiplas linguagens de programação (servidor Canada Central);<br>
             ✔️ Servidor flexível do Banco de Dados do Azure para MySQL (servidor Canada East);<br>
@@ -249,13 +275,26 @@
         </p>
         <p>Se você tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato: maristela.oliveira@df.senac.br, ou deixe seu comentário abaixo.</p>
     </div>
+
+    <!-- Faixa de tecnologias utilizadas -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:18px; margin-top:28px; padding-top:20px; border-top:1px solid rgba(4,83,4,0.2);">
+        <span style="font-size:13px; opacity:0.7; width:100%; text-align:center; margin-bottom:4px;">Tecnologias utilizadas</span>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:18px;">
+            <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python" title="Python" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" title="Flask" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='html5-original.svg') }}" alt="HTML5" title="HTML5" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='css3-original.svg') }}" alt="CSS3" title="CSS3" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='javascript-original.svg') }}" alt="JavaScript" title="JavaScript" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='azure-original.svg') }}" alt="Microsoft Azure" title="Microsoft Azure" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='canva-original.svg') }}" alt="Canva" title="Canva" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='github-original.svg') }}" alt="GitHub" title="GitHub" style="height:36px; width:auto;">
+        </div>
+    </div>
 </div>
 
 <!-- Seção de Comentários -->
 <section class="comentarios-section" style="margin-top: 40px;" aria-labelledby="comentarios-titulo">
-    <h2 id="comentarios-titulo" style="color: #045304ff; margin-bottom: 20px;">
-        <span aria-hidden="true">💬</span> Comentários
-    </h2>
+    <h2 id="comentarios-titulo" style="color: #045304ff; margin-bottom: 20px;">Comentários</h2>
     
     <!-- Mensagens Flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -393,7 +432,10 @@
 </main>
 
 <footer>
-    &copy;  Maristela <span aria-hidden="true">🐍 🌶️</span> 2026
+    &copy; Maristela
+    <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python" class="inline-icon">
+    <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" class="inline-icon">
+    2026
 </footer>
 
 </body>
