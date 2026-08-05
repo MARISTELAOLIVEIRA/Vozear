@@ -223,9 +223,8 @@
 <div class="logo-container" style="flex-direction: column;">
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do Vozear">
     <p class="logo-credit">
-        Logo criada com IA do
+        Logo criada com IA do Canva 
         <img src="{{ url_for('static', filename='canva-original.svg') }}" alt="Canva" style="height:36px; width:auto; vertical-align:middle;">
-        Canva
     </p>
 </div>
 
@@ -247,11 +246,13 @@
             <img src="{{ url_for('static', filename='azure-original.svg') }}" alt="Microsoft Azure" class="inline-icon">
             <span style="color: #1a8debff;">Microsoft Azure</span>:
             <br><br>
-            ✔️ Serviço de Aplicativo com suporte a múltiplas linguagens de programação (servidor Canada Central);<br>
-            ✔️ Servidor flexível do Banco de Dados do Azure para MySQL (servidor Canada East);<br>
+            ✔️<img src="{{ url_for('static', filename='App.png') }}" alt="Serviço de App Azure" class="inline-icon">Serviço de Aplicativo com suporte a múltiplas linguagens de programação (servidor Canada Central). A implantação está sendo feita através do cento de implantação do Azure, que permite a publicação contínua do código-fonte do projeto diretamente do repositório GitHub e Provedor de implantação
+GitHubAction. Utilizo o Github Codespaces para desenvolvimento e testes, garantindo que o código esteja sempre atualizado e funcional.<br>
+            ✔️<img src="{{ url_for('static', filename='bd.png') }}" alt="Banco de dados" class="inline-icon"> Servidor flexível do Banco de Dados do Azure para MySQL (servidor Canada East);<br>
             ✔️ API de síntese de voz, com vozes naturais e de alta qualidade;<br>
-            ✔️ Inteligência artificial <span style="color: #1a8debff;"> Azure Computer Vision</span> (servidor East US), um serviço que analisa e descreve imagens automaticamente. Isso permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
+            ✔️<img src="{{ url_for('static', filename='PVC.png') }}" alt="Pesquisa Visual Computacional" class="inline-icon"> Inteligência artificial <span style="color: #1a8debff;"> Azure Computer Vision</span> (servidor East US), um serviço que analisa e descreve imagens automaticamente. Isso permite que o sistema interprete imagens contidas em PDFs ou enviadas separadamente, gerando uma descrição em texto que é 
             posteriormente convertida em áudio.
+            
             <br><br>
 
             Entre os recursos disponíveis, o usuário pode:
