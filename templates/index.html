@@ -166,6 +166,18 @@
     <button type="button" id="botao-salvar">💾 Baixar Texto</button>
     <button type="button" id="limpar-btn">🔄 Limpar</button>
 
+    {% if audio_file %}
+        <section aria-label="Resultado da conversão" aria-live="polite" style="margin-top: 18px;">
+            <p>✅ Áudio gerado com sucesso! Ouça abaixo e clique em <strong>Baixar MP3</strong> quando quiser salvar.</p>
+            <audio controls aria-label="Áudio gerado pelo Vozear">
+                <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
+                Seu navegador não suporta áudio HTML5. <a href="{{ url_for('audio', filename=audio_file) }}">Baixar o áudio</a>.
+            </audio>
+            <br>
+            <button type="button" onclick="baixarAudio('{{ url_for('audio', filename=audio_file) }}', '{{ audio_file }}')">⬇️ Baixar MP3</button>
+        </section>
+    {% endif %}
+
 
 
 <label for="arquivo">Envie um arquivo PDF (com ou sem imagens) ou uma imagem para gerar a audiodescrição:</label>
@@ -219,18 +231,6 @@
         }
     }
 </style>
-
-{% if audio_file %}
-    <section aria-label="Resultado da conversão" aria-live="polite">
-        <p>✅ Áudio gerado com sucesso! Ouça abaixo e clique em <strong>Baixar MP3</strong> quando quiser salvar.</p>
-        <audio controls aria-label="Áudio gerado pelo Vozear">
-            <source src="{{ url_for('audio', filename=audio_file) }}" type="audio/mpeg">
-            Seu navegador não suporta áudio HTML5. <a href="{{ url_for('audio', filename=audio_file) }}">Baixar o áudio</a>.
-        </audio>
-        <br>
-        <button type="button" onclick="baixarAudio('{{ url_for('audio', filename=audio_file) }}', '{{ audio_file }}')">⬇️ Baixar MP3</button>
-    </section>
-{% endif %}
 </main>
 <footer>
     &copy; <a href="https://stela.tec.br" target="_blank" rel="noopener noreferrer"> Maristela </a> 🐍 🌶️ 2025
