@@ -126,6 +126,10 @@
             margin: 0 2px;
         }
 
+        .flask-icon {
+            filter: brightness(0) saturate(100%) invert(21%) sepia(94%) saturate(3500%) hue-rotate(353deg) brightness(100%) contrast(112%);
+        }
+
         .logo-credit {
             text-align: center;
             font-size: 13px;
@@ -233,7 +237,7 @@
             O <strong style="color: #045304ff;">VOZEAR</strong> é um projeto desenvolvido por mim, <em>Profª Maristela Oliveira</em>, e nasceu da necessidade real de tornar o conteúdo digital 
             mais acessível, especialmente para alunos com deficiência visual, dificuldades de leitura e (/ou) escrita ou alguma neurodivergência. Foi desenvolvido em
             Python <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python" class="inline-icon">
-            com o framework web Flask <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" class="inline-icon">
+            com o framework web Flask <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" class="inline-icon flask-icon">
             e banco de dados MySQL.
             <br><br>
             O aluno que utiliza ledores de tela, não encontrará dificuldades em acessar o conteúdo do site, pois ele foi projetado para ser totalmente compatível com tecnologias assistivas. Além disso, o sistema é responsivo, garantindo uma experiência de usuário consistente em dispositivos móveis e desktops.
@@ -281,7 +285,7 @@
         <span style="font-size:13px; opacity:0.7; width:100%; text-align:center; margin-bottom:4px;">Tecnologias utilizadas</span>
         <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:18px;">
             <img src="{{ url_for('static', filename='python-original.svg') }}" alt="Python" title="Python" style="height:36px; width:auto;">
-            <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" title="Flask" style="height:36px; width:auto;">
+            <img src="{{ url_for('static', filename='flask-original.svg') }}" alt="Flask" title="Flask" style="height:36px; width:auto; filter: brightness(0) saturate(100%) invert(21%) sepia(94%) saturate(3500%) hue-rotate(353deg) brightness(100%) contrast(112%);">
             <img src="{{ url_for('static', filename='html5-original.svg') }}" alt="HTML5" title="HTML5" style="height:36px; width:auto;">
             <img src="{{ url_for('static', filename='css3-original.svg') }}" alt="CSS3" title="CSS3" style="height:36px; width:auto;">
             <img src="{{ url_for('static', filename='javascript-original.svg') }}" alt="JavaScript" title="JavaScript" style="height:36px; width:auto;">
