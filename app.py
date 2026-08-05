@@ -27,7 +27,8 @@ if not os.path.exists(AUDIO_FOLDER):
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a59277976e9c00c59914b53f5abef33cfa67669a3661d'
 
 # Configuração do banco de dados - suporte MySQL e SQLite
-def get_database_uri():
+def get_database_config():
+    """Retorna (uri, engine_options) para o banco disponível."""
     mysql_host = os.environ.get('DB_HOST') or os.environ.get('MYSQL_HOST')
     mysql_user = os.environ.get('DB_USER') or os.environ.get('MYSQL_USER')
     mysql_password = os.environ.get('DB_PASSWORD') or os.environ.get('MYSQL_PASSWORD')
@@ -35,8 +36,8 @@ def get_database_uri():
     mysql_port = int(os.environ.get('DB_PORT', '3306'))
 
     if mysql_host and mysql_user and mysql_password:
-        # Certificado SSL do Azure MySQL (DigiCert Global Root G2)
-        ssl_ca = os.path.join(os.path.dirname(__file__), '.github', 'DigiCertGlobalRootG2.crt.pem')
+        ssl_ca = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.github', 'DigiCertGlobalRootG2.crt.pem')
+        # ssl_ca presente → verifica cert; senão, apenas exige transporte SSL
         ssl_args = {'ssl_ca': ssl_ca} if os.path.exists(ssl_ca) else {'ssl': {'ssl': True}}
         try:
             import pymysql
@@ -48,23 +49,28 @@ def get_database_uri():
             conn.close()
             from urllib.parse import quote_plus
             encoded_password = quote_plus(mysql_password)
+            uri = (f"mysql+pymysql://{mysql_user}:{encoded_password}"
+                   f"@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4")
+            # SSL passado via connect_args, não pela URL
+            engine_options = {'connect_args': ssl_args}
             print(f"🗄️ Conectando ao MySQL: {mysql_host}:{mysql_port}/{mysql_database}")
-            ssl_param = f"&ssl_ca={ssl_ca}" if os.path.exists(ssl_ca) else "&ssl=true"
-            return f"mysql+pymysql://{mysql_user}:{encoded_password}@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4{ssl_param}"
+            return uri, engine_options
         except Exception as e:
             print(f"⚠️ MySQL inacessível ({e}), usando SQLite local como fallback")
 
     print("🗄️ Usando SQLite local (desenvolvimento)")
-    return 'sqlite:///vozear_comentarios.db'
+    return 'sqlite:///vozear_comentarios.db', {}
 
 try:
-    database_uri = get_database_uri()
+    database_uri, engine_options = get_database_config()
     app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    if engine_options:
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = engine_options
     if database_uri.startswith('mysql'):
         print("Configuração de banco: MySQL (credenciais ocultas)")
     else:
         print("Configuração de banco: SQLite local")
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Inicializar SQLAlchemy
     db = SQLAlchemy(app)
