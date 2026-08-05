@@ -217,6 +217,7 @@
     {% endwith %}
     
     <form method="POST" action="{{ url_for('admin_login') }}">
+        <input type="hidden" name="next" value="{{ next_url or '' }}">
         <div class="form-group">
             <label for="username">👤 Usuário</label>
             <input type="text" id="username" name="username" required 

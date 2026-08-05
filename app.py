@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import os
 import asyncio
+from urllib.parse import urlparse
 import edge_tts
 import fitz
 import time
@@ -46,8 +47,12 @@ def get_database_uri():
         return 'sqlite:///vozear_comentarios.db'
 
 try:
-    app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
-    print(f"Configuração de banco: {app.config['SQLALCHEMY_DATABASE_URI'].split('@')[0]}@...")  # Log sem credenciais
+    database_uri = get_database_uri()
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+    if database_uri.startswith('mysql'):
+        print("Configuração de banco: MySQL (credenciais ocultas)")
+    else:
+        print("Configuração de banco: SQLite local")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Inicializar SQLAlchemy
@@ -70,7 +75,10 @@ try:
         db.create_all()
     
     BANCO_ATIVO = True
-    print("✅ Banco de dados SQLite inicializado com sucesso")
+    if database_uri.startswith('mysql'):
+        print("✅ Banco de dados MySQL inicializado com sucesso")
+    else:
+        print("✅ Banco de dados SQLite inicializado com sucesso")
     
 except Exception as e:
     print(f"⚠️ Erro no banco de dados (funcionando sem comentários): {e}")
@@ -82,15 +90,22 @@ except Exception as e:
         pass
 
 # Configurações de admin
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "vozear2025"  # Mude para uma senha mais segura em produção
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'vozear2025')
+
+
+def is_safe_redirect_target(target):
+    if not target:
+        return False
+    parsed = urlparse(target)
+    return parsed.scheme == "" and parsed.netloc == "" and target.startswith("/")
 
 # Decorador para proteger rotas admin
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('logged_in'):
-            return redirect(url_for('admin_login'))
+            return redirect(url_for('admin_login', next=request.full_path.rstrip('?')))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -209,6 +224,8 @@ def sobre():
 # Rota de login admin
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
+    next_url = request.args.get("next") or request.form.get("next")
+
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -217,11 +234,13 @@ def admin_login():
             session['logged_in'] = True
             session['admin_user'] = username
             flash("Login realizado com sucesso!", "success")
+            if is_safe_redirect_target(next_url):
+                return redirect(next_url)
             return redirect(url_for('admin_comentarios'))
         else:
             flash("Usuário ou senha incorretos!", "error")
     
-    return render_template("admin_login.html")
+    return render_template("admin_login.html", next_url=next_url)
 
 # Rota de logout admin
 @app.route("/admin/logout")
