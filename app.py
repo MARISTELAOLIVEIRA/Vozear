@@ -28,23 +28,34 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or '78754f9651a49e373a8a
 
 # Configuração do banco de dados - suporte MySQL e SQLite
 def get_database_uri():
-    # Primeiro tentar MySQL (Azure)
     mysql_host = os.environ.get('DB_HOST') or os.environ.get('MYSQL_HOST')
     mysql_user = os.environ.get('DB_USER') or os.environ.get('MYSQL_USER')
     mysql_password = os.environ.get('DB_PASSWORD') or os.environ.get('MYSQL_PASSWORD')
     mysql_database = os.environ.get('DB_NAME') or os.environ.get('MYSQL_DATABASE', 'vozearbd')
-    mysql_port = os.environ.get('DB_PORT', '3306')
-    
+    mysql_port = int(os.environ.get('DB_PORT', '3306'))
+
     if mysql_host and mysql_user and mysql_password:
-        # MySQL no Azure - codificar senha para URL
-        from urllib.parse import quote_plus
-        encoded_password = quote_plus(mysql_password)
-        print(f"🗄️ Conectando ao MySQL: {mysql_host}:{mysql_port}/{mysql_database}")
-        return f"mysql+pymysql://{mysql_user}:{encoded_password}@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4&ssl_verify_cert=false&ssl_verify_identity=false"
-    else:
-        # Fallback para SQLite local
-        print("🗄️ Usando SQLite local (desenvolvimento)")
-        return 'sqlite:///vozear_comentarios.db'
+        # Certificado SSL do Azure MySQL (DigiCert Global Root G2)
+        ssl_ca = os.path.join(os.path.dirname(__file__), '.github', 'DigiCertGlobalRootG2.crt.pem')
+        ssl_args = {'ssl_ca': ssl_ca} if os.path.exists(ssl_ca) else {'ssl': {'ssl': True}}
+        try:
+            import pymysql
+            conn = pymysql.connect(
+                host=mysql_host, user=mysql_user, password=mysql_password,
+                database=mysql_database, port=mysql_port, connect_timeout=5,
+                **ssl_args
+            )
+            conn.close()
+            from urllib.parse import quote_plus
+            encoded_password = quote_plus(mysql_password)
+            print(f"🗄️ Conectando ao MySQL: {mysql_host}:{mysql_port}/{mysql_database}")
+            ssl_param = f"&ssl_ca={ssl_ca}" if os.path.exists(ssl_ca) else "&ssl=true"
+            return f"mysql+pymysql://{mysql_user}:{encoded_password}@{mysql_host}:{mysql_port}/{mysql_database}?charset=utf8mb4{ssl_param}"
+        except Exception as e:
+            print(f"⚠️ MySQL inacessível ({e}), usando SQLite local como fallback")
+
+    print("🗄️ Usando SQLite local (desenvolvimento)")
+    return 'sqlite:///vozear_comentarios.db'
 
 try:
     database_uri = get_database_uri()
